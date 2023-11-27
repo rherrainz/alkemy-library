@@ -7,14 +7,15 @@ const role = (sequelize) => {
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    name:{
+    role:{
         type: DataTypes.ENUM('superadmin','admin', 'user', 'guest'),
         allowNull: false,        
         },
     
   }, { timestamps: true });
   Role.associate = (models) => {
-    Role.belongsToMany(models.User, { //revisar si funciona mal el belongsToMany si no va el hasMany
+    Role.belongsToMany(models.User, 
+    { 
       foreignKey: "roleId",
       as: "users",
     });

@@ -69,7 +69,7 @@ const book = (sequelize) => {
         
     }, {timestamps: true});
     Book.associate = (models) => {
-        Book.hasMany(models.Author, { //revisar si va belongsToMany
+        Book.belongsToMany(models.Author, { //revisar si va belongsToMany
             foreignKey: "authorId",
             as: "author",
         });
@@ -84,6 +84,10 @@ const book = (sequelize) => {
         Book.hasMany(models.Loan, {
             foreignKey: "bookId",
             as: "loan",
+        });
+        Book.hasMany(models.Review, {
+            foreignKey: "bookId",
+            as: "reviews",
         });
     }
     return Book;

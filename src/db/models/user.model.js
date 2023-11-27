@@ -37,7 +37,12 @@ const user = (sequelize) => {
     User.hasOne(models.Role, {
       foreignKey: "roleId",
       as: "role",
-    });
+    },
+    User.hasMany(models.Review, {
+        foreignKey: "userId",
+        as: "reviews",
+      }),
+    );
   }
   return User;
 };

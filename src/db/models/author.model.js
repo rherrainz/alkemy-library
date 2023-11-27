@@ -23,4 +23,12 @@ const author = (sequelize) => {
             type: DataTypes.STRING,
         }
     }, {timestamps: true});
+    Author.associate = (models) => {
+        Author.hasMany(models.Book, {
+            foreignKey: "authorId",
+            as: "books",
+        });
+    }
+    return Author;
 }
+export default author;
