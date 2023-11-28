@@ -4,7 +4,7 @@ const genre = (sequelize) => {
     const Genre = sequelize.define('genre', {
         genreId: {
             type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         genreName:{
@@ -16,6 +16,7 @@ const genre = (sequelize) => {
         Genre.belongsToMany(models.Book, {
             foreignKey: 'bookId',
             as: 'books',
+            through: 'book_genre',
         });
     }
     return Genre;

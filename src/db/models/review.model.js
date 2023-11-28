@@ -1,10 +1,10 @@
-import {DataTypes} from 'sequelize';
+import {DataTypes,Sequelize} from 'sequelize';
 
 const review = (sequelize) => {
     const Review = sequelize.define('review', {
         reviewId: {
             type: DataTypes.UUID,
-            defaultValue: sequelize.UUIDV4,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         reviewText:{
@@ -29,7 +29,7 @@ const review = (sequelize) => {
         },
     
     }, {timestamps: true});
-    Review.asociate = (models) => {
+    Review.associate = (models) => {
         Review.belongsTo(models.User, {
             foreignKey: 'userId',
             as: 'user',

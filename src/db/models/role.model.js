@@ -1,10 +1,10 @@
-import { Sequelize, DataTypes } from "sequelize";
+import {DataTypes,Sequelize} from 'sequelize';
 
 const role = (sequelize) => {
   const Role = sequelize.define("role", {
     roleId: {
       type: DataTypes.UUID,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     role:{
@@ -18,6 +18,7 @@ const role = (sequelize) => {
     { 
       foreignKey: "roleId",
       as: "users",
+      through: "user_role",
     });
   }
   return Role;

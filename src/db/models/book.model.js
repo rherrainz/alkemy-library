@@ -1,10 +1,10 @@
-import {DataTypes} from 'sequelize';
+import {DataTypes,Sequelize} from 'sequelize';
 
 const book = (sequelize) => {
     const Book = sequelize.define('book', {
         bookId: {
             type: DataTypes.UUID,
-            defaultValue: sequelize.UUIDV4,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         title:{
@@ -68,6 +68,7 @@ const book = (sequelize) => {
         Book.belongsToMany(models.Author, { //revisar si va belongsToMany
             foreignKey: "authorId",
             as: "author",
+            through: "author_book",
         });
         Book.hasMany(models.Language, { //revisar si va belongsToMany
             foreignKey: "languageId",

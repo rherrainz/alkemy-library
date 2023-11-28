@@ -1,10 +1,10 @@
-import {DataTypes} from 'sequelize';
+import {DataTypes,Sequelize} from 'sequelize';
 
 const author = (sequelize) => {
     const Author = sequelize.define('author', {
         authorId: {
             type: DataTypes.UUID,
-            defaultValue: sequelize.UUIDV4,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         firstName:{

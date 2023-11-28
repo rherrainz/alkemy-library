@@ -4,7 +4,7 @@ const user = (sequelize) => {
   const User = sequelize.define("user", {
     userId: {
       type: DataTypes.UUID,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     firstName:{

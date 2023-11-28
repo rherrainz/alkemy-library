@@ -1,10 +1,10 @@
-import {DataTypes} from 'sequelize';
+import {DataTypes,Sequelize} from 'sequelize';
 
 const language = (sequelize) => {
     const Language = sequelize.define('language', {
         languageId: {
             type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         languageName:{
@@ -16,6 +16,7 @@ const language = (sequelize) => {
         Language.belongsToMany(models.Book, {
             foreignKey: 'bookId',
             as: 'books',
+            through: 'book_language',
         });
     }
     return Language;
