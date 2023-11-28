@@ -1,10 +1,10 @@
-import {DataTypes} from 'sequelize';
+import {DataTypes,Sequelize} from 'sequelize';
 
 const loan = (sequelize) => {
     const Loan = sequelize.define('loan', {
         loanId: {
             type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         startDate:{
