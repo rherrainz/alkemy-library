@@ -4,7 +4,7 @@ const loan = (sequelize) => {
     const Loan = sequelize.define('loan', {
         loanId: {
             type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4,
+            defaultValue: sequelize.UUIDV4,
             primaryKey: true,
         },
         startDate:{

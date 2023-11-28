@@ -4,7 +4,7 @@ const review = (sequelize) => {
     const Review = sequelize.define('review', {
         reviewId: {
             type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4,
+            defaultValue: sequelize.UUIDV4,
             primaryKey: true,
         },
         reviewText:{

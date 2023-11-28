@@ -4,7 +4,7 @@ const book = (sequelize) => {
     const Book = sequelize.define('book', {
         bookId: {
             type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4,
+            defaultValue: sequelize.UUIDV4,
             primaryKey: true,
         },
         title:{
@@ -61,11 +61,7 @@ const book = (sequelize) => {
         genreId:{
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        authorId:{
-            type: DataTypes.STRING,
-            allowNull: false,
-        }      
+        }    
         
     }, {timestamps: true});
     Book.associate = (models) => {
