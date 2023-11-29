@@ -1,12 +1,15 @@
 import { HTTP_STATUSES } from "../constants/http.js";
+import { UserService } from "../services/user.service.js";
 
-export class UserController {
-  async getOneUser(req, res, next) {
+const getById = async (req, res, next) => {
     try {
-      const id = req.params.id;
-      res.status(HTTP_STATUSES.OK).json({ UserID: id });
+        const result = await UserService.getById(req.params.id);
+        res.status(HTTP_STATUSES.OK).json({ data: result });
     } catch (error) {
-      console.log(error);
+        next(error);
     }
-  }
+};
+
+export const UserController = {
+    getById,
 }
