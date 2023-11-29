@@ -1,4 +1,14 @@
+import { HTTP_STATUSES } from "../constants/http.js";
 import { BookService } from "../services/book.service.js";
+
+const getAll = async (req, res, next) => {
+    try {
+        const result = await BookService.getAll();
+        res.status(HTTP_STATUSES.OK).json({ data: result });
+    } catch (error) {
+        next(error);
+    }
+};
 
 const getById = async (req, res, next) => {
     try {
@@ -19,6 +29,7 @@ const remove = async (req, res, next) => {
 }
 
 export const BookController = {
+    getAll,
     getById,
     remove
 }
