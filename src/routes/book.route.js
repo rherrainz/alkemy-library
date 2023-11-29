@@ -5,5 +5,6 @@ const router = express.Router();
 
 
 router.get('/:id', BookController.getById)
+router.delete('/:id', BookController.remove)
 
 export default router;

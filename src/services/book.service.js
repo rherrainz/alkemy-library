@@ -1,4 +1,4 @@
-import { BookRepository } from "../repositories/book.repository";
+import { BookRepository } from "../repositories/book.repository.js";
 
 const getAll = async() => {
     return await BookRepository.getAll();
@@ -28,6 +28,10 @@ const update = async(id, book) => {
     return await BookRepository.update(id, book)
 }
 
+const remove = async(id) => {
+    return await BookRepository.remove(id)
+}
+
 export const BookService = {
     getAll,
     getById,
@@ -35,5 +39,6 @@ export const BookService = {
     getByLanguageId,
     getByGenreId,
     create,
-    update
+    update,
+    remove
 }
