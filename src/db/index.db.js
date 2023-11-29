@@ -11,13 +11,19 @@ import 'dotenv/config';
 
 let db = {};
 
-const sequelize = new Sequelize(process.env.DATABASE_URI,{
-    dialect: 'mysql',
-    dialectOptions:{
-        ssl:{
-            rejectUnauthorized: true
-        }
-    }
+// const sequelize = new Sequelize(process.env.DATABASE_URI,{
+//     dialect: 'mysql',
+//     dialectOptions:{
+//         ssl:{
+//             rejectUnauthorized: true
+//         }
+//     }
+// }); 
+
+
+const sequelize = new Sequelize('alkemy_library', 'root', '159dae159', {
+    host: 'localhost',
+    dialect: 'mysql'
 });
 
 db.sequelize = sequelize;
@@ -41,4 +47,4 @@ db.Review.associate(db);
 db.Role.associate(db);
 db.User.associate(db);
 
-export {db};
+export { db };

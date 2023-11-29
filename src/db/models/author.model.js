@@ -1,4 +1,4 @@
-import {DataTypes,Sequelize} from 'sequelize';
+import { DataTypes, Sequelize } from 'sequelize';
 
 const author = (sequelize) => {
     const Author = sequelize.define('author', {
@@ -7,25 +7,25 @@ const author = (sequelize) => {
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        firstName:{
+        firstName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        lastName:{
+        lastName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        birthDate:{
+        birthDate: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        nationality:{
+        nationality: {
             type: DataTypes.STRING,
         }
-    }, {timestamps: true});
+    }, { timestamps: true });
     Author.associate = (models) => {
         Author.hasMany(models.Book, {
-            foreignKey: "authorId",
+            foreignKey: "bookId",
             as: "books",
         });
     }

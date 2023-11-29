@@ -1,4 +1,4 @@
-import {DataTypes,Sequelize} from 'sequelize';
+import { DataTypes, Sequelize } from 'sequelize';
 
 const book = (sequelize) => {
     const Book = sequelize.define('book', {
@@ -7,63 +7,63 @@ const book = (sequelize) => {
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        title:{
+        title: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        ISBN:{
+        ISBN: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        edition:{
+        edition: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        year:{
+        year: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        numberOfPages:{
+        numberOfPages: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        },  
-        authorId:{
+        },
+        authorId: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        publisher:{
+        publisher: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        languageId:{
+        languageId: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        avgScore:{
+        avgScore: {
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        isLoaned:{
+        isLoaned: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
         },
-        isLongLoan:{
+        isLongLoan: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
         },
-        isActive:{
+        isActive: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: true,
         },
-        genreId:{
+        genreId: {
             type: DataTypes.STRING,
             allowNull: false,
-        }    
-        
-    }, {timestamps: true});
+        }
+
+    }, { timestamps: true });
     Book.associate = (models) => {
         Book.belongsToMany(models.Author, { //revisar si va belongsToMany
             foreignKey: "authorId",
@@ -79,11 +79,11 @@ const book = (sequelize) => {
             as: "genre",
         });
         Book.hasMany(models.Loan, {
-            foreignKey: "bookId",
+            foreignKey: "loanId",
             as: "loan",
         });
         Book.hasMany(models.Review, {
-            foreignKey: "bookId",
+            foreignKey: "reviewId",
             as: "reviews",
         });
     }

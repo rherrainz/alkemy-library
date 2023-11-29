@@ -5,11 +5,13 @@ const router = express.Router();
 // import authorRouter from './author.route.js';
 import bookRouter from './book.route.js';
 // import loanRouter from './loan.route.js';
-import reviewRouter from './review.route.js';
+// import reviewRouter from './review.route.js';
+import genreRouter from './genre.route.js';
 
 
 router.use('/book', bookRouter);
-router.use('/review', reviewRouter)
+// router.use('/review', reviewRouter)
+router.use('/genre', genreRouter)
 
 
 
