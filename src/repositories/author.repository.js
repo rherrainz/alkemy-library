@@ -7,7 +7,7 @@ const getAll = async() => {
     return await db.Author.findAll();
 }
 
-const getByAuthorId = async(id) => {
+const getByAuthorId = async(authorId) => {
     return await db.Author.findByPk(authorId);
 }
 
