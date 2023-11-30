@@ -11,18 +11,10 @@ import 'dotenv/config';
 
 let db = {};
 
-// const sequelize = new Sequelize(process.env.DATABASE_URI,{
-//     dialect: 'mysql',
-//     dialectOptions:{
-//         ssl:{
-//             rejectUnauthorized: true
-//         }
-//     }
-// }); 
-
-
-const sequelize = new Sequelize('alkemy_library', 'root', '159dae159', {
-    host: 'localhost',
+const sequelize = new Sequelize(process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASS, {
+    host: process.env.DB_HOST,
     dialect: 'mysql'
 });
 

@@ -1,7 +1,7 @@
 import { UserRepository } from "../repositories/user.repository.js"
 
 const getAll = async () => {
-    return await BookRepository.getAll();
+    return await UserRepository.getAll();
 }
 
 const getById = async (id) => {
