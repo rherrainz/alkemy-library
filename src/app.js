@@ -8,7 +8,7 @@ import indexRouter from './routes/index.route.js';
 try {
   await db.sequelize.authenticate();
   console.log("Connection has been established successfully.");
-  db.sequelize.sync({ force: true }).then(() => {
+  db.sequelize.sync({ force: false }).then(() => {
     console.log("Drop and re-sync db.");
   });
 }
