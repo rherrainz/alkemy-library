@@ -1,38 +1,24 @@
-import {DataTypes,Sequelize} from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const loan = (sequelize) => {
     const Loan = sequelize.define('loan', {
-        loanId: {
+        id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        startDate:{
+        startDate: {
             type: DataTypes.DATE,
-            allowNull: false,
-            },
-        dueDate:{
-            type: DataTypes.DATE,
-            allowNull: false,
-            },
-        userId:{
-            type: DataTypes.STRING,
             allowNull: false,
         },
-        bookId:{
-            type: DataTypes.STRING,
+        dueDate: {
+            type: DataTypes.DATE,
             allowNull: false,
-        }    
-    }, {timestamps: true});
+        },
+    }, { timestamps: true });
     Loan.associate = (models) => {
-        Loan.hasOne(models.User, {
-            foreignKey: "userId",
-            as: "user",
-        });
-        Loan.hasOne(models.Book, {
-            foreignKey: "bookId",
-            as: "book",
-        });
+        Loan.belongsTo(models.User)
+        Loan.belongsTo(models.Book)
     }
     return Loan;
 }

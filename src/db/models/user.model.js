@@ -1,52 +1,45 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 
 const user = (sequelize) => {
-  const User = sequelize.define("user", {
-    userId: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    firstName:{
+  const User = sequelize.define(
+    "user",
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
-        },
-    lastName:{
+      },
+      lastName: {
         type: DataTypes.STRING,
         allowNull: false,
-        },
-    email:{
+      },
+      email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        },
-    password:{
+      },
+      password: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-    roleId:{
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    isActive:{
+      },
+      isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-    }
-  }, { timestamps: true });
-  User.associate = (models) => {
-    User.hasOne(models.Role, {
-      foreignKey: "roleId",
-      as: "role",
+        defaultValue: true
+      },
     },
-    User.hasMany(models.Review, {
-        foreignKey: "userId",
-        as: "reviews",
-      }),
-    );
-  }
+    { timestamps: true }
+  );
+  User.associate = (models) => {
+    User.belongsTo(models.Role)
+    User.hasMany(models.Loan)
+    User.hasMany(models.Review)
+  };
   return User;
 };
-
-
 
 export default user;

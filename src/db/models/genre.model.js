@@ -1,23 +1,19 @@
-import {DataTypes} from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const genre = (sequelize) => {
     const Genre = sequelize.define('genre', {
-        genreId: {
+        id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        genreName:{
+        genre: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-    }, {timestamps: true});
+    }, { timestamps: true });
     Genre.associate = (models) => {
-        Genre.belongsToMany(models.Book, {
-            foreignKey: 'bookId',
-            as: 'books',
-            through: 'book_genre',
-        });
+        Genre.belongsToMany(models.Book, { through: 'book_genre' });
     }
     return Genre;
 }

@@ -1,8 +1,8 @@
-import { DataTypes, Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const book = (sequelize) => {
     const Book = sequelize.define('book', {
-        bookId: {
+        id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
@@ -27,15 +27,7 @@ const book = (sequelize) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        authorId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         publisher: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        languageId: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -58,34 +50,14 @@ const book = (sequelize) => {
             allowNull: false,
             defaultValue: true,
         },
-        genreId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        }
 
     }, { timestamps: true });
     Book.associate = (models) => {
-        Book.belongsToMany(models.Author, { //revisar si va belongsToMany
-            foreignKey: "authorId",
-            as: "author",
-            through: "author_book",
-        });
-        Book.hasMany(models.Language, { //revisar si va belongsToMany
-            foreignKey: "languageId",
-            as: "language",
-        });
-        Book.hasMany(models.Genre, { //revisar si va belongsToMany
-            foreignKey: "genreId",
-            as: "genre",
-        });
-        Book.hasMany(models.Loan, {
-            foreignKey: "loanId",
-            as: "loan",
-        });
-        Book.hasMany(models.Review, {
-            foreignKey: "reviewId",
-            as: "reviews",
-        });
+        Book.belongsToMany(models.Author, { through: "author_book" });
+        Book.belongsToMany(models.Language, { through: 'book_language' });
+        Book.belongsToMany(models.Genre, { through: 'book_genre' });
+        Book.hasMany(models.Loan)
+        Book.hasMany(models.Review)
     }
     return Book;
 }

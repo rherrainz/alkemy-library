@@ -1,23 +1,19 @@
-import {DataTypes,Sequelize} from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const language = (sequelize) => {
     const Language = sequelize.define('language', {
-        languageId: {
+        id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        languageName:{
+        language: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-    }, {timestamps: true});
+    }, { timestamps: true });
     Language.associate = (models) => {
-        Language.belongsToMany(models.Book, {
-            foreignKey: 'bookId',
-            as: 'books',
-            through: 'book_language',
-        });
+        Language.belongsToMany(models.Book, { through: 'book_language' });
     }
     return Language;
 }

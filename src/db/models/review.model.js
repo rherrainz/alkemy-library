@@ -1,44 +1,28 @@
-import {DataTypes,Sequelize} from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const review = (sequelize) => {
     const Review = sequelize.define('review', {
-        reviewId: {
+        id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        reviewText:{
+        reviewText: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        rating:{
+        rating: {
             type: DataTypes.INTEGER,
-            validate:{
+            validate: {
                 min: 1,
                 max: 10
             },
             allowNull: false,
         },
-        userId:{
-            type: DataTypes.UUID,
-            allowNull: false,
-        },
-        bookId:{
-            type: DataTypes.UUID,
-            allowNull: false,
-        },
-    
-    }, {timestamps: true});
+    }, { timestamps: true });
     Review.associate = (models) => {
-        Review.belongsTo(models.User, {
-            foreignKey: 'userId',
-            as: 'user',
-        });
-        Review.belongsTo(models.Book, {
-            foreignKey: 'bookId',
-            as: 'book',
-        });
-
+        Review.belongsTo(models.User)
+        Review.belongsTo(models.Book)
     }
 
     return Review;

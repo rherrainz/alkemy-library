@@ -1,20 +1,26 @@
-import express from 'express';
+import express, { urlencoded } from 'express';
 import 'dotenv/config'
-import {db} from './db/index.db.js';
+import cookieParser from "cookie-parser";
+import { db } from './db/index.db.js';
 import indexRouter from './routes/index.route.js';
 
-try{
+
+try {
   await db.sequelize.authenticate();
   console.log("Connection has been established successfully.");
   db.sequelize.sync({ force: true }).then(() => {
     console.log("Drop and re-sync db.");
   });
 }
-catch(error){
-  console.log(`Unable to connect to the database: ${error}`);  
+catch (error) {
+  console.log(`Unable to connect to the database: ${error}`);
 }
 
 const app = express();
+
+app.use(express.json())
+app.use(cookieParser())
+app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;
 

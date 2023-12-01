@@ -1,8 +1,8 @@
-import { DataTypes, Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
 const author = (sequelize) => {
     const Author = sequelize.define('author', {
-        authorId: {
+        id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
@@ -24,10 +24,7 @@ const author = (sequelize) => {
         }
     }, { timestamps: true });
     Author.associate = (models) => {
-        Author.hasMany(models.Book, {
-            foreignKey: "bookId",
-            as: "books",
-        });
+        Author.belongsToMany(models.Book, { through: 'author_book' });
     }
     return Author;
 }
