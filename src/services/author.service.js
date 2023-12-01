@@ -4,20 +4,20 @@ const getAll = async() => {
     return await AuthorRepository.getAll();
 }
 
-const getByAuthorId = async(authorId) => {
-    return await AuthorRepository.getByAuthorId(authorId)
+const getByAuthorId = async(id) => {
+    return await AuthorRepository.getByAuthorId(id)
 }
 
 const create = async(author) => {
     return await AuthorRepository.create(author)
 }
 
-const update = async(authorId, author) => {
+const update = async(id, author) => {
     return await AuthorRepository.update(authorId, author)
 }
 
-const remove = async(authorId) => {
-    return await AuthorRepository.remove(authorId)
+const remove = async(id) => {
+    return await AuthorRepository.remove(id)
 }
 
 export const AuthorService = {
