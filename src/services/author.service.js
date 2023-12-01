@@ -13,7 +13,7 @@ const create = async(author) => {
 }
 
 const update = async(id, author) => {
-    return await AuthorRepository.update(authorId, author)
+    return await AuthorRepository.update(id, author)
 }
 
 const remove = async(id) => {
