@@ -23,8 +23,8 @@ const getByGenreId = async(genreId) => {
     return await db.Book.find({genreId: genreId});
 }
 
-const create = async(user) => {
-    return await db.Book.create(user)
+const create = async(book) => {
+    return await db.Book.create(book)
 }
 
 const update = async(id, book)=> {
