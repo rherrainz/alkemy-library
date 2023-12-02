@@ -31,8 +31,10 @@ const login = async (email, password) => {
     const isPasswordValid = await comparePassword(password, user.dataValues.password)
     if (!isPasswordValid) throw new Error("Invalid credentials")
     const token = encode({
-        user: user.email,
+        id: user.id,
+        email: user.email,
         roleId: user.roleId,
+        isActive: user.isActive
     })
     return token
 }
