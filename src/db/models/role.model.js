@@ -13,9 +13,9 @@ const role = (sequelize) => {
     },
 
   }, { timestamps: true });
-  Role.associate = (models) => {
-    Role.hasMany(models.User)
-  }
+  // Role.associate = (models) => {
+  //   Role.hasMany(models.User)
+  // }
   return Role;
 };
 

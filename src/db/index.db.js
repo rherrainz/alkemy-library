@@ -11,12 +11,14 @@ import 'dotenv/config';
 
 let db = {};
 
-const sequelize = new Sequelize(process.env.DB_NAME,
+const sequelize = new Sequelize(
+    process.env.DB_NAME,
     process.env.DB_USER,
     process.env.DB_PASS, {
-    host: process.env.DB_HOST,
-    dialect: 'mysql'
-});
+        host: process.env.DB_HOST,
+        dialect: 'mysql'
+    }
+);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
@@ -27,7 +29,7 @@ db.Genre = genre(sequelize, Sequelize);
 db.Language = language(sequelize, Sequelize);
 db.Loan = loan(sequelize, Sequelize);
 db.Review = review(sequelize, Sequelize);
-db.Role = role(sequelize, Sequelize);
+// db.Role = role(sequelize, Sequelize);
 db.User = user(sequelize, Sequelize);
 
 db.Author.associate(db);
@@ -36,7 +38,7 @@ db.Genre.associate(db);
 db.Language.associate(db);
 db.Loan.associate(db);
 db.Review.associate(db);
-db.Role.associate(db);
+// db.Role.associate(db);
 db.User.associate(db);
 
 export { db };

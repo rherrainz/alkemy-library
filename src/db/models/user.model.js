@@ -1,4 +1,5 @@
 import { DataTypes } from "sequelize";
+import { ROLE } from "../../constants/role.constants.js";
 
 const user = (sequelize) => {
   const User = sequelize.define(
@@ -31,11 +32,17 @@ const user = (sequelize) => {
         allowNull: false,
         defaultValue: true
       },
+      role: {
+        type: DataTypes.ENUM,
+        values: Object.values(ROLE),
+        allowNull: false,
+        defaultValue: ROLE.USER,
+      }
     },
     { timestamps: true }
   );
   User.associate = (models) => {
-    User.belongsTo(models.Role)
+    // User.belongsTo(models.Role)
     User.hasMany(models.Loan)
     User.hasMany(models.Review)
   };
