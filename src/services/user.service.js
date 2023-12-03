@@ -1,10 +1,11 @@
 import { UserRepository } from "../repositories/user.repository.js"
 import { hashPassword, comparePassword } from "../utils/password.util.js"
+import ApiError from '../errors/api.error.js'
 
 //MÉTODO UTILIZADO EN EL AUTH SERVICE
 const findUserByEmailAndPassword = async (email, password) => {
     const user = await UserRepository.getUserByEmail(email);
-    if (!user) throw new Error('Credenciales incorrectas');
+    if (!user) throw new ApiError('Credenciales incorrectas');
     const isPasswordValid = await comparePassword(password, user.dataValues.password);
     if (isPasswordValid) return user.dataValues;
 }
