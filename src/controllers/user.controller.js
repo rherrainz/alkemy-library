@@ -29,8 +29,18 @@ const create = async (req, res, next) => {
     }
 }
 
+const deleteById = async (req, res, next) => {
+    try {
+        const result = await UserService.deleteById(req.params.id);
+        res.status(HTTP_STATUSES.OK).json({ data: result})
+    } catch (error) {
+        next(new ApiError(error.message));
+    }
+}
+
 export const UserController = {
     getAll,
     getById,
-    create
+    create,
+    deleteById
 }

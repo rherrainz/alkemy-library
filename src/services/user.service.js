@@ -28,7 +28,7 @@ const update = async (id, user) => {
     return await UserRepository.update(id, user)
 }
 
-const remove = async (id) => {
+const deleteById = async (id) => {
     return await UserRepository.remove(id)
 }
 
@@ -38,5 +38,5 @@ export const UserService = {
     getById,
     create,
     update,
-    remove,
+    deleteById,
 }
