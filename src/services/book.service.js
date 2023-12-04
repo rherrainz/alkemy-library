@@ -1,48 +1,48 @@
 import { BookRepository } from "../repositories/book.repository.js";
 
-const getAll = async() => {
-    return await BookRepository.getAll();
-}
-
-const getById = async(id) => {
-    return await BookRepository.getById(id)
-}
-
-const getByAuthorId = async(authorId) => {
-    return await BookRepository.getByAuthorId(authorId)
-}
-
-const getByLanguageId = async(languageId) => {
-    return await BookRepository.getByLanguageId(languageId)
-}
-
-const getByGenreId = async(genreId) => {
-    return await BookRepository.getByGenreId(genreId)
-}
-
-const getByAuthorOrTitle = async(author, title) => {
-    return await BookRepository.getByAuthorOrTitle(author, title);
+const getAll = async () => {
+  return await BookRepository.getAll();
 };
 
-const create = async(book, arrayId) => {
-    return await BookRepository.create(book, arrayId)
-}
+const getById = async (id) => {
+  return await BookRepository.getById(id);
+};
 
-const update = async(id, book) => {
-    return await BookRepository.update(id, book)
-}
+const getByAuthorId = async (authorId) => {
+  return await BookRepository.getByAuthorId(authorId);
+};
 
-const remove = async(id) => {
-    return await BookRepository.remove(id)
-}
+const getByLanguageId = async (languageId) => {
+  return await BookRepository.getByLanguageId(languageId);
+};
+
+const getByGenreId = async (genreId) => {
+  return await BookRepository.getByGenreId(genreId);
+};
+
+const getByAuthorOrTitle = async (author, title) => {
+  return await BookRepository.getByAuthorOrTitle(author, title);
+};
+
+const create = async (book, arrayId) => {
+  return await BookRepository.create(book, arrayId);
+};
+
+const update = async (id, book) => {
+  return await BookRepository.update(id, book);
+};
+
+const remove = async (id) => {
+  return await BookRepository.remove(id);
+};
 
 export const BookService = {
-    getAll,
-    getById,
-    getByAuthorId,
-    getByLanguageId,
-    getByGenreId,
-    create,
-    update,
-    remove
-}
+  getAll,
+  getById,
+  getByAuthorId,
+  getByLanguageId,
+  getByGenreId,
+  create,
+  update,
+  remove,
+};

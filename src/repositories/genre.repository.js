@@ -1,33 +1,32 @@
 /*TODO: IMPORTACIÓN DE INDEX.DB */
-import { db } from "./../db/index.db.js"
-
+import { db } from "./../db/index.db.js";
 
 //ACCIÓN CON PRIVILEGIOS
-const getAll = async() => {
-    return await db.Genre.findAll();
-}
+const getAll = async () => {
+  return await db.Genre.findAll();
+};
 
-const getById = async(id) => {
-    return await db.Genre.findByPk(id);
-}
+const getById = async (id) => {
+  return await db.Genre.findByPk(id);
+};
 
-const create = async(Genre) => {
-    return await db.Genre.create(Genre)
-}
+const create = async (Genre) => {
+  return await db.Genre.create(Genre);
+};
 
-const update = async(id, Genre)=> {
-    return await db.Genre.update(
-        {
-            startDate: Genre.startDate,
-            dueDate: Genre.dueDate
-        }, {where: {id: id}}
-        )
-}
-
+const update = async (id, Genre) => {
+  return await db.Genre.update(
+    {
+      startDate: Genre.startDate,
+      dueDate: Genre.dueDate,
+    },
+    { where: { id: id } },
+  );
+};
 
 export const GenreRepository = {
-    getAll,
-    getById,
-    create,
-    update
-}
+  getAll,
+  getById,
+  create,
+  update,
+};

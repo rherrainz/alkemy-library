@@ -3,42 +3,42 @@ import { db } from "./../db/index.db.js";
 
 //ACCIÓN CON PRIVILEGIOS
 const getAll = async () => {
-    return await db.Author.findAll();
+  return await db.Author.findAll();
 };
 
 const getByAuthorId = async (id) => {
-    return await db.Author.findByPk(id);
+  return await db.Author.findByPk(id);
 };
 
 const create = async (author) => {
-    return await db.Author.create(author);
+  return await db.Author.create(author);
 };
 
 const update = async (id, author) => {
-    return await db.Author.update(
-        {
-            firstName: author.firstName,
-            lastName: author.lastName,
-            birthDate: author.birthDate,
-            nationality: author.nationality,
-        },
-        { where: { id: id } }
-    );
+  return await db.Author.update(
+    {
+      firstName: author.firstName,
+      lastName: author.lastName,
+      birthDate: author.birthDate,
+      nationality: author.nationality,
+    },
+    { where: { id: id } },
+  );
 };
 
 const remove = async (id) => {
-    return db.Author.update(
-        {
-            isActive: false,
-        },
-        { where: { id: id } }
-    );
+  return db.Author.update(
+    {
+      isActive: false,
+    },
+    { where: { id: id } },
+  );
 };
 
 export const AuthorRepository = {
-    getAll,
-    getByAuthorId,
-    create,
-    update,
-    remove,
+  getAll,
+  getByAuthorId,
+  create,
+  update,
+  remove,
 };

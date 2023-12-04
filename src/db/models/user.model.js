@@ -30,21 +30,21 @@ const user = (sequelize) => {
       isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: true
+        defaultValue: true,
       },
       role: {
         type: DataTypes.ENUM,
         values: Object.values(ROLE),
         allowNull: false,
         defaultValue: ROLE.USER,
-      }
+      },
     },
-    { timestamps: true }
+    { timestamps: true },
   );
   User.associate = (models) => {
     // User.belongsTo(models.Role)
-    User.hasMany(models.Loan)
-    User.hasMany(models.Review)
+    User.hasMany(models.Loan);
+    User.hasMany(models.Review);
   };
   return User;
 };

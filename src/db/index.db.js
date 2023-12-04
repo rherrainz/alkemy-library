@@ -6,17 +6,18 @@ import language from "./models/language.model.js";
 import loan from "./models/loan.model.js";
 import review from "./models/review.model.js";
 import user from "./models/user.model.js";
-import 'dotenv/config';
+import "dotenv/config";
 
 let db = {};
 
 const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASS, {
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASS,
+  {
     host: process.env.DB_HOST,
-    dialect: 'mysql'
-}
+    dialect: "mysql",
+  },
 );
 
 db.sequelize = sequelize;
