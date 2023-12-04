@@ -20,6 +20,10 @@ const getByGenreId = async(genreId) => {
     return await BookRepository.getByGenreId(genreId)
 }
 
+const getByAuthorOrTitle = async(author, title) => {
+    return await BookRepository.getByAuthorOrTitle(author, title);
+};
+
 const create = async(book, arrayId) => {
     return await BookRepository.create(book, arrayId)
 }

@@ -44,6 +44,23 @@ const getByAuthorId = async(authorId) => {
         });
 }
 
+const getByAuthorOrTitle = async(author, title) => {
+    return await db.Book.findAll(
+        {
+            include: [ 
+                {
+                    model: db.Author, //TABLA RELACIONADA A LA QUERY
+                    through: { attributes: ['authorId'] } //COLUMNA DE LA TABLA INTERMEDIA
+                } 
+            ],
+            where: {
+                '$Authors.name$': author,
+                title: title,
+                isLoaned: false //FILTRO SEGÚN EL AUTOR
+            }
+        });
+};
+
 const getByLanguageId = async(languageId) => {
     return await db.Book.find({languageId: languageId});
 }
@@ -119,6 +136,7 @@ export const BookRepository = {
     getByAuthorId,
     getByLanguageId,
     getByGenreId,
+    getByAuthorOrTitle,
     create,
     update,
     remove
