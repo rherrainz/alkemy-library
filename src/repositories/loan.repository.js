@@ -46,9 +46,13 @@ const create = async(loan, arrayId) => {
     const book = await db.Book.findByPk(arrayId.bookId);
     const user = await db.User.findByPk(arrayId.userId);
 
-    if(!book || !user)
+    if(!book)
     {
-        throw new ApiError('Book | User not found', 404);
+        throw new ApiError('Book not found', 404);
+    }
+    if(!user)
+    {
+        throw new ApiError('User not found', 404);
     }
 
     //TODO: SE CREA EL PRÉSTAMO
