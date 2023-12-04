@@ -40,9 +40,21 @@ const remove = async (req, res, next) => {
     }
 }
 
+const edit = async (req, res, next) => {
+    try{
+        const result = await LoanService.update(req.params.id, req.params.arrayId);
+        res.status(HTTP_STATUSES.ACCEPTED).json({ data: result})
+    } catch (error){
+        next(new ApiError(error.message))
+    }
+}
+
+
+
 export const LoanController = {
     getAll,
     getById,
     create,
+    edit,
     remove
 }
