@@ -49,8 +49,6 @@ const edit = async (req, res, next) => {
     }
 }
 
-
-
 export const LoanController = {
     getAll,
     getById,

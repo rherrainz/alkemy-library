@@ -5,6 +5,7 @@ import { isAuthenticated, isAdmin, isSupAdmin } from "../middlewares/authorizati
 const router = express.Router();
 
 router.get('/', BookController.getAll);
+router.get('/loan', isAdmin, BookController.getOnlyLoan);
 router.get('/:id', BookController.getById);
 router.get('/author/:id', BookController.getByAuthorId);
 router.get('/genre/:id', BookController.getByGenreId);

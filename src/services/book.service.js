@@ -4,6 +4,10 @@ const getAll = async() => {
     return await BookRepository.getAll();
 }
 
+const getOnlyLoan = async() => {
+    return await BookRepository.getOnlyLoan();
+}
+
 const getById = async(id) => {
     return await BookRepository.getById(id)
 }
@@ -38,10 +42,12 @@ const remove = async(id) => {
 
 export const BookService = {
     getAll,
+    getOnlyLoan,
     getById,
     getByAuthorId,
     getByLanguageId,
     getByGenreId,
+    getByAuthorOrTitle,
     create,
     update,
     remove

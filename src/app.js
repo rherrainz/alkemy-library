@@ -6,6 +6,9 @@ import indexRouter from './routes/index.route.js';
 import ApiError from './errors/api.error.js';
 
 
+//npm install --dev prettier
+//npm run format
+
 try {
   await db.sequelize.authenticate();
   console.log("Connection has been established successfully.");
