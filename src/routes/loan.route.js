@@ -8,5 +8,6 @@ const router = express.Router();
 router.get('/', LoanController.getAll);
 router.get("/:id", isAuthenticated, LoanController.getById);
 router.post('/', LoanController.create);
+router.patch('/edit/:id', isAdmin, LoanController.edit); 
 
 export default router;
