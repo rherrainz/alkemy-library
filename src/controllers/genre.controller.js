@@ -30,11 +30,12 @@ const remove = async (req, res, next) => {
     }
 }
 
-const add = async () => {
+const add = async (req, res, next) => {
     try {
-
+        const result = await GenreService.create(req.body);
+        res.status(200).json({ data: result });
     } catch (error) {
-        next(error);
+        next(new ApiError(error.message));
     }
 }
 
