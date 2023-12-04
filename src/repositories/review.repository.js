@@ -12,15 +12,31 @@ const getById = async(id) => {
 }
 
 const getByUserId = async(userId) => {
-    return await db.Review.find({ userId: userId});
+    return await db.Review.findAll({where: { userId: userId}});
 }
 
 const getByBookId = async(bookId) => {
-    return await db.Review.find({ bookId: bookId});
+    return await db.Review.findAll({where: {bookId: bookId}});
 }
 
-const create = async(review) => {
-    return await db.Review.create(review)
+const create = async(review, user) => {
+    const book = await db.Book.findByPk(review.bookId);
+    if (!book) throw new ApiError('Book id not found', HTTP_STATUSES.BAD_REQUEST);
+    review.userId = user.id
+
+    const reviewCreated = await db.Review.create(review);
+    const reviews = await getByBookId(book.id)
+    
+    let totalRating = 0
+    reviews.forEach(element => {
+        totalRating += +element.dataValues.rating
+    });
+    const avg = totalRating / reviews.length
+    const updateAvgScore = await db.Book.update(
+            { avgScore: avg },
+            { where: { id: book.id }}
+        )
+    return reviewCreated;
 }
 
 const update = async(id, review)=> {

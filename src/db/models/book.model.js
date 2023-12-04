@@ -34,6 +34,7 @@ const book = (sequelize) => {
         avgScore: {
             type: DataTypes.FLOAT,
             allowNull: false,
+            defaultValue: 0
         },
         isLoaned: {
             type: DataTypes.BOOLEAN,
