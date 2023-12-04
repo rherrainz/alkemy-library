@@ -10,8 +10,15 @@ const findUserByEmailAndPassword = async (email, password) => {
     if (isPasswordValid) return user.dataValues;
 }
 
-const getAll = async () => {
-    return await UserRepository.getAll();
+const getAll = async (page) => {
+    let options = {}
+    if (page && !isNaN(page)) {
+        options = {
+            offset: (page - 1) * 10,
+            limit: 10,
+        };
+    }
+    return await UserRepository.getAll(options);
 }
 
 const getById = async (id) => {
