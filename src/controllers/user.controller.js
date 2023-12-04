@@ -4,7 +4,7 @@ import ApiError from "../errors/api.error.js";
 
 const getAll = async (req, res, next) => {
     try {
-        const result = await UserService.getAll();
+        const result = await UserService.getAll(req.query.page);
         res.status(HTTP_STATUSES.OK).json({ data: result });
     } catch (error) {
         next(new ApiError(error.message));
@@ -32,7 +32,7 @@ const create = async (req, res, next) => {
 const deleteById = async (req, res, next) => {
     try {
         const result = await UserService.deleteById(req.params.id);
-        res.status(HTTP_STATUSES.OK).json({ data: result})
+        res.status(HTTP_STATUSES.OK).json({ data: result })
     } catch (error) {
         next(new ApiError(error.message));
     }

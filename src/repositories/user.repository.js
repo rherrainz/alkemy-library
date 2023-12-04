@@ -3,8 +3,8 @@ import { db } from "./../db/index.db.js"
 
 
 //ACCIÓN CON PRIVILEGIOS
-const getAll = async () => {
-    return await db.User.findAll();
+const getAll = async (options) => {
+    return await db.User.findAll(options);
 }
 
 const getById = async (id) => {
