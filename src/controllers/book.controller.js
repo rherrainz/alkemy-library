@@ -40,6 +40,17 @@ const getByGenreId = async (req, res, next) => {
     }
 }
 
+const getByAuthorOrTitle = async (req, res, next) => {
+    try {
+        const { author, title } = req.query;
+        const result = await BookService.getByAuthorOrTitle(author, title);
+        res.status(HTTP_STATUSES.ACCEPTED).json({ data: result });
+    } catch (error) {
+        next(new ApiError(error.message));
+    }
+
+}
+
 const create = async (req, res, next) => {
     try 
     {
@@ -74,6 +85,7 @@ export const BookController = {
     getById,
     getByAuthorId,
     getByGenreId,
+    getByAuthorOrTitle,
     remove,
     create,
     update
