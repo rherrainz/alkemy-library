@@ -24,12 +24,12 @@ const getByGenreId = async(genreId) => {
     return await LoanRepository.getByGenreId(genreId)
 }
 
-const create = async(loan) => {
-    return await LoanRepository.create(loan)
+const create = async(loan, arrayId) => {
+    return await LoanRepository.create(loan, arrayId)
 }
 
-const update = async(id, loan) => {
-    return await LoanRepository.update(id, loan)
+const update = async(id, arrayId) => {
+    return await LoanRepository.update(id, arrayId)
 }
 
 const remove = async(id) => {

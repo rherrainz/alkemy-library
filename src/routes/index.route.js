@@ -5,7 +5,7 @@ import userRouter from './user.route.js';
 import authenticationRouter from './authentication.route.js';
 import authorRouter from './author.route.js';
 import bookRouter from './book.route.js';
-// import loanRouter from './loan.route.js';
+import loanRouter from './loan.route.js';
 // import reviewRouter from './review.route.js';
 import genreRouter from './genre.route.js';
 import roleRouter from './role.route.js';
@@ -17,7 +17,7 @@ router.use('/login', authenticationRouter);
 router.use('/author', authorRouter);
 router.use('/book', bookRouter);
 router.use('/role', roleRouter);
-// router.use('/review', reviewRouter)
+router.use('/loan', loanRouter)
 router.use('/genre', genreRouter);
 router.use('/language', languageRouter);
 
