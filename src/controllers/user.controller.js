@@ -11,6 +11,15 @@ const getAll = async (req, res, next) => {
   }
 };
 
+const getByParams = async (req, res, next) => {
+  try {
+    const result = await UserService.getByParams(req.query)
+    res.status(HTTP_STATUSES.OK).json({ data: result})
+  } catch (error) {
+    next(new ApiError(error.message))
+  }
+}
+
 const getById = async (req, res, next) => {
   try {
     const result = await UserService.getById(req.params.id);
@@ -40,6 +49,7 @@ const deleteById = async (req, res, next) => {
 
 export const UserController = {
   getAll,
+  getByParams,
   getById,
   create,
   deleteById,

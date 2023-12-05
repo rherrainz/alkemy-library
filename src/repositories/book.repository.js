@@ -101,13 +101,12 @@ const getByGenreId = async (genreId) => {
   });
 };
 
-//TODO: VERIFICAR ARRAY
-const create = async(book, arrayId) => {
+const create = async(book, {authorId, genreId, languageId}) => {
 
-    // TODO: PRIMERO SE DEBE VERIFICAR QUE LOS AUTORES EXISTAN SEGÚN LOS IDS
-    const authors = await Promise.all(arrayId.authorId.map(authorId => db.Author.findByPk(authorId)));
-    const genres = await Promise.all(arrayId.genreId.map(genreId => db.Genre.findByPk(genreId)));
-    const languages = await Promise.all(arrayId.languageId.map(languageId => db.Language.findByPk(languageId)));
+    //PRIMERO SE DEBE VERIFICAR QUE LOS AUTORES EXISTAN SEGÚN LOS IDS
+    const authors = await Promise.all(authorId.map(authorId => db.Author.findByPk(authorId)));
+    const genres = await Promise.all(genreId.map(genreId => db.Genre.findByPk(genreId)));
+    const languages = await Promise.all(languageId.map(languageId => db.Language.findByPk(languageId)));
 
     // Verificar que todos los autores existan
     if(authors.some(author => !author)) {
@@ -122,7 +121,7 @@ const create = async(book, arrayId) => {
         throw new ApiError('Language does not exist', 404);
     }
 
-    // TODO: SE CREA EL LIBRO
+    //SE CREA EL LIBRO
     const bookCreated = await db.Book.create(book);
 
     await bookCreated.addAuthor(authors);

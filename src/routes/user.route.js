@@ -9,6 +9,7 @@ import {
 const router = express.Router();
 
 router.get("/", isAuthenticated, UserController.getAll);
+router.get("/params", UserController.getByParams)
 router.post("/", UserController.create);
 router.get("/:id", UserController.getById);
 router.delete("/:id", isSupAdmin, UserController.deleteById);

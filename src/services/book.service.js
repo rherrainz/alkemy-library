@@ -28,8 +28,8 @@ const getByAuthorOrTitle = async(author, title) => {
     return await BookRepository.getByAuthorOrTitle(author, title);
 };
 
-const create = async (book, arrayId) => {
-  return await BookRepository.create(book, arrayId);
+const create = async (book, {authorId, genreId, languageId}) => {
+  return await BookRepository.create(book, {authorId, genreId, languageId});
 };
 
 const update = async (id, book) => {
