@@ -28,17 +28,17 @@ const getByAuthorOrTitle = async(author, title) => {
     return await BookRepository.getByAuthorOrTitle(author, title);
 };
 
-const create = async(book, arrayId) => {
-    return await BookRepository.create(book, arrayId)
-}
+const create = async (book, arrayId) => {
+  return await BookRepository.create(book, arrayId);
+};
 
-const update = async(id, book) => {
-    return await BookRepository.update(id, book)
-}
+const update = async (id, book) => {
+  return await BookRepository.update(id, book);
+};
 
-const remove = async(id) => {
-    return await BookRepository.remove(id)
-}
+const remove = async (id) => {
+  return await BookRepository.remove(id);
+};
 
 export const BookService = {
     getAll,

@@ -1,28 +1,26 @@
 /*TODO: IMPORTACIÓN DE INDEX.DB */
 import ApiError from "../errors/api.error.js";
-import { db } from "./../db/index.db.js"
-import { Op } from "sequelize";
+import { db } from "./../db/index.db.js";
 
 //ACCIÓN CON PRIVILEGIOS
-const getAll = async() => {
-    return await db.Book.findAll(
-        {
-            include: [ 
-                {
-                    model: db.Author, //TABLA RELACIONADA A LA QUERY
-                    through: { attributes: ['authorId'] } //COLUMNA DE LA TABLA INTERMEDIA
-                },
-                {
-                    model: db.Genre,
-                    through: { attributes: ['genreId'] }
-                },
-                {
-                    model: db.Language,
-                    through: { attributes: ['languageId'] } 
-                }
-            ],
-        });
-}
+const getAll = async () => {
+  return await db.Book.findAll({
+    include: [
+      {
+        model: db.Author, //TABLA RELACIONADA A LA QUERY
+        through: { attributes: ["authorId"] }, //COLUMNA DE LA TABLA INTERMEDIA
+      },
+      {
+        model: db.Genre,
+        through: { attributes: ["genreId"] },
+      },
+      {
+        model: db.Language,
+        through: { attributes: ["languageId"] },
+      },
+    ],
+  });
+};
 
 //TODO: RETORNA TODOS LOS LIBROS QUE ESTÉN EN PRÉSTAMO ORDENADOS DE MANERA ASC SEGÚN FECHA DE SOLICITUD
 const getOnlyLoan = async() => {
@@ -50,61 +48,58 @@ const getOnlyLoan = async() => {
     });
 }
 
-const getById = async(id) => {
-    return await db.Book.findByPk(id);
-}
-
-const getByAuthorId = async(authorId) => {
-    return await db.Book.findAll(
-        {
-            include: [ 
-                {
-                    model: db.Author, //TABLA RELACIONADA A LA QUERY
-                    through: { attributes: ['authorId'] } //COLUMNA DE LA TABLA INTERMEDIA
-                } 
-            ],
-            where: {
-                '$Authors.id$': authorId, //FILTRO SEGÚN EL AUTOR
-                isLoaned: false 
-            }
-        });
-}
-
-const getByAuthorOrTitle = async(author, title) => {
-    return await db.Book.findAll(
-        {
-            include: [ 
-                {
-                    model: db.Author, //TABLA RELACIONADA A LA QUERY
-                    through: { attributes: ['authorId'] } //COLUMNA DE LA TABLA INTERMEDIA
-                } 
-            ],
-            where: {
-                '$Authors.name$': author,
-                title: title,
-                isLoaned: false //FILTRO SEGÚN EL AUTOR
-            }
-        });
+const getById = async (id) => {
+  return await db.Book.findByPk(id);
 };
 
-const getByLanguageId = async(languageId) => {
-    return await db.Book.find({languageId: languageId});
-}
+const getByAuthorId = async (authorId) => {
+  return await db.Book.findAll({
+    include: [
+      {
+        model: db.Author, //TABLA RELACIONADA A LA QUERY
+        through: { attributes: ["authorId"] }, //COLUMNA DE LA TABLA INTERMEDIA
+      },
+    ],
+    where: {
+      "$Authors.id$": authorId,
+      isLoaned: false, //FILTRO SEGÚN EL AUTOR
+    },
+  });
+};
 
-const getByGenreId = async(genreId) => {
-    return await db.Book.findAll(
-        {
-            include: [
-                {
-                    model: db.Genre,
-                    through: { attributes: ['genreId']}
-                }
-            ],
-            where: {
-                '$Genres.id$': genreId
-            }
-        });
-}
+const getByAuthorOrTitle = async (author, title) => {
+  return await db.Book.findAll({
+    include: [
+      {
+        model: db.Author, //TABLA RELACIONADA A LA QUERY
+        through: { attributes: ["authorId"] }, //COLUMNA DE LA TABLA INTERMEDIA
+      },
+    ],
+    where: {
+      "$Authors.name$": author,
+      title: title,
+      isLoaned: false, //FILTRO SEGÚN EL AUTOR
+    },
+  });
+};
+
+const getByLanguageId = async (languageId) => {
+  return await db.Book.find({ languageId: languageId });
+};
+
+const getByGenreId = async (genreId) => {
+  return await db.Book.findAll({
+    include: [
+      {
+        model: db.Genre,
+        through: { attributes: ["genreId"] },
+      },
+    ],
+    where: {
+      "$Genres.id$": genreId,
+    },
+  });
+};
 
 //TODO: VERIFICAR ARRAY
 const create = async(book, arrayId) => {
@@ -130,39 +125,39 @@ const create = async(book, arrayId) => {
     // TODO: SE CREA EL LIBRO
     const bookCreated = await db.Book.create(book);
 
-    // TODO: POR ÚLTIMO SE ASOCIA CON LOS AUTORES, EL GÉNERO Y EL IDIOMA
-    await bookCreated.addAuthors(authors);
+    await bookCreated.addAuthor(authors);
     await bookCreated.addGenre(genres);
     await bookCreated.addLanguage(languages);
 
     return bookCreated;
-
 }
 
-const update = async(id, book)=> {
-    return await db.Book.update(
-        {
-            title: book.title,
-            ISBN: book.ISBN,
-            edition: book.edition,
-            year: book.year,
-            numberOfPages: book.numberOfPages,
-            publisher: book.publisher,
-            avgScore: book.avgScore,
-            isLoaned: book.isLoaned,
-            isLongLoan: book.isLongLoan,
-            isActive: book.isActive
-        }, {where: {id: id}}
-        )
-}
+const update = async (id, book) => {
+  return await db.Book.update(
+    {
+      title: book.title,
+      ISBN: book.ISBN,
+      edition: book.edition,
+      year: book.year,
+      numberOfPages: book.numberOfPages,
+      publisher: book.publisher,
+      avgScore: book.avgScore,
+      isLoaned: book.isLoaned,
+      isLongLoan: book.isLongLoan,
+      isActive: book.isActive,
+    },
+    { where: { id: id } },
+  );
+};
 
-const remove = async(id) => {
-    return db.Book.update(
-        {
-            isActive: false
-        }, {where: {id: id}}
-    )
-}
+const remove = async (id) => {
+  return db.Book.update(
+    {
+      isActive: false,
+    },
+    { where: { id: id } },
+  );
+};
 
 export const BookRepository = {
     getAll,
