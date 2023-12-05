@@ -39,14 +39,12 @@ const getByBookId = async (bookId) => {
 const create = async (loan, arrayId) => {
   //TODO: PRIMERO SE DEBE VERIFICAR QUE EXISTA EL LIBRO Y EL USUARIO
   const book = await db.Book.findByPk(arrayId.bookId);
-  const user = await db.User.findByPk(arrayId.userId);
 
   if (!book) {
     throw new ApiError("Book not found", 404);
   }
-  if (!user) {
-    throw new ApiError("User not found", 404);
-  }
+
+  loan.userId = arrayId.user.id;
 
   //TODO: SE CREA EL PRÉSTAMO
   const loanCreated = await db.Loan.create(loan);
@@ -60,7 +58,7 @@ const update = async (id, loan) => {
       startDate: loan.startDate,
       dueDate: loan.dueDate,
     },
-    { where: { id: id } },
+    { where: { id: id } }
   );
 };
 

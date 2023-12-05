@@ -1,6 +1,7 @@
 import { HTTP_STATUSES } from "../constants/http.js";
 import { LoanService } from "../services/loan.service.js";
 import ApiError from "../errors/api.error.js";
+import { info } from "../log/logger.log.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -22,8 +23,10 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const { userId, bookId } = req.body;
-    const result = await LoanService.create(req.body, { userId, bookId });
+    const user = req.user;
+    const { bookId } = req.body;
+    const result = await LoanService.create(req.body, { user, bookId });
+    info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
     next(new ApiError(error.message));
