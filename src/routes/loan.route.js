@@ -1,10 +1,6 @@
 import express from "express";
 import { LoanController } from "../controllers/loan.controller.js";
-import {
-  isAuthenticated,
-  isAdmin,
-  isSupAdmin,
-} from "../middlewares/authorization.middleware.js";
+import {isAuthenticated,isAdmin,isSupAdmin,} from "../middlewares/authorization.middleware.js";
 
 const router = express.Router();
 
