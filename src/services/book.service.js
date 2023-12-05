@@ -1,27 +1,31 @@
 import { BookRepository } from "../repositories/book.repository.js";
 
-const getAll = async () => {
-  return await BookRepository.getAll();
-};
+const getAll = async() => {
+    return await BookRepository.getAll();
+}
 
-const getById = async (id) => {
-  return await BookRepository.getById(id);
-};
+const getOnlyLoan = async() => {
+    return await BookRepository.getOnlyLoan();
+}
 
-const getByAuthorId = async (authorId) => {
-  return await BookRepository.getByAuthorId(authorId);
-};
+const getById = async(id) => {
+    return await BookRepository.getById(id)
+}
 
-const getByLanguageId = async (languageId) => {
-  return await BookRepository.getByLanguageId(languageId);
-};
+const getByAuthorId = async(authorId) => {
+    return await BookRepository.getByAuthorId(authorId)
+}
 
-const getByGenreId = async (genreId) => {
-  return await BookRepository.getByGenreId(genreId);
-};
+const getByLanguageId = async(languageId) => {
+    return await BookRepository.getByLanguageId(languageId)
+}
 
-const getByAuthorOrTitle = async (author, title) => {
-  return await BookRepository.getByAuthorOrTitle(author, title);
+const getByGenreId = async(genreId) => {
+    return await BookRepository.getByGenreId(genreId)
+}
+
+const getByAuthorOrTitle = async(author, title) => {
+    return await BookRepository.getByAuthorOrTitle(author, title);
 };
 
 const create = async (book, arrayId) => {
@@ -37,12 +41,14 @@ const remove = async (id) => {
 };
 
 export const BookService = {
-  getAll,
-  getById,
-  getByAuthorId,
-  getByLanguageId,
-  getByGenreId,
-  create,
-  update,
-  remove,
-};
+    getAll,
+    getOnlyLoan,
+    getById,
+    getByAuthorId,
+    getByLanguageId,
+    getByGenreId,
+    getByAuthorOrTitle,
+    create,
+    update,
+    remove
+}
