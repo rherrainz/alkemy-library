@@ -6,6 +6,28 @@ const getAll = async (options) => {
   return await db.User.findAll(options);
 };
 
+//MÉTODO QUE RETORNA LOS USUARIOS QUE COINCIDAN CON LOS PARÁMETROS ENVIADOS EN LA QUERY
+const getByParams = async ({email, name, surname}) => {
+
+  const whereClause = {};
+
+  if(email){
+    whereClause.email = email;
+  }
+
+  if(name){
+    whereClause.firstName = name;
+  }
+
+  if(surname){
+    whereClause.lastName = surname;
+  }
+
+  return await db.User.findAll({
+    where: whereClause
+  });
+}
+
 const getById = async (id) => {
   return await db.User.findByPk(id);
 };
@@ -43,6 +65,7 @@ const getUserByEmail = async (email) => {
 
 export const UserRepository = {
   getAll,
+  getByParams,
   getById,
   create,
   update,

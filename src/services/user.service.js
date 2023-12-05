@@ -24,6 +24,10 @@ const getAll = async (page) => {
   return await UserRepository.getAll(options);
 };
 
+const getByParams = async ({email, name,surname}) => {
+  return await UserRepository.getByParams({email, name,surname});
+}
+
 const getById = async (id) => {
   return await UserRepository.getById(id);
 };
@@ -45,6 +49,7 @@ const deleteById = async (id) => {
 export const UserService = {
   findUserByEmailAndPassword,
   getAll,
+  getByParams,
   getById,
   create,
   update,
