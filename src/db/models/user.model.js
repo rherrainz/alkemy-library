@@ -39,10 +39,9 @@ const user = (sequelize) => {
         defaultValue: ROLE.USER,
       },
     },
-    { timestamps: true },
+    { timestamps: true }
   );
   User.associate = (models) => {
-    // User.belongsTo(models.Role)
     User.hasMany(models.Loan);
     User.hasMany(models.Review);
   };
