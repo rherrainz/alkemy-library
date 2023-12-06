@@ -5,17 +5,24 @@ import {
   isAdmin,
   isSupAdmin,
 } from "../middlewares/authorization.middleware.js";
+import { BookMiddleware } from "../middlewares/book.middleware.js";
 
 const router = express.Router();
 
-router.get("/", BookController.getAll);
-router.get('/loan', isAdmin, BookController.getOnlyLoan);
-router.get("/:id", BookController.getById);
-router.get("/author/:id", BookController.getByAuthorId);
-router.get("/genre/:id", BookController.getByGenreId);
-router.get("/author-title/:id",isAuthenticated,BookController.getByAuthorOrTitle);
-router.delete("/:id", BookController.remove);
-router.post("/", BookController.create);
-router.patch("/:id", BookController.update);
+router.get("/", isAuthenticated, BookController.getAllActive);
+router.get("/all", isAdmin, BookController.getAll);
+router.get("/loan", isAdmin, BookController.getOnlyLoan);
+router.get("/:id", isAuthenticated, BookController.getById);
+router.get("/author/:id", isAuthenticated, BookController.getByAuthorId);
+router.get("/genre/:id", isAuthenticated, BookController.getByGenreId);
+router.get("/author-title", isAuthenticated, BookController.getByAuthorOrTitle);
+router.delete("/:id", isAdmin, BookController.remove);
+router.post("/", isAdmin, BookMiddleware.validateCreate, BookController.create);
+router.patch(
+  "/:id",
+  isAdmin,
+  BookMiddleware.validateUpdate,
+  BookController.update
+);
 
 export default router;
