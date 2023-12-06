@@ -174,6 +174,15 @@ const update = async (id, book) => {
   );
 };
 
+const returnBook = async (id) => {
+  return db.Book.update(
+    {
+      isLoaned: false,
+    },
+    { where: { id: id } }
+  );
+};
+
 const remove = async (id) => {
   return db.Book.update(
     {
@@ -194,5 +203,6 @@ export const BookRepository = {
   getByAuthorOrTitle,
   create,
   update,
+  returnBook,
   remove,
 };

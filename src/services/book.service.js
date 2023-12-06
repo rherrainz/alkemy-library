@@ -40,6 +40,10 @@ const update = async (id, book) => {
   return await BookRepository.update(id, book);
 };
 
+const returnBook = async (id) => {
+  return await BookRepository.returnBook(id);
+};
+
 const remove = async (id) => {
   return await BookRepository.remove(id);
 };
@@ -55,5 +59,6 @@ export const BookService = {
   getByAuthorOrTitle,
   create,
   update,
+  returnBook,
   remove,
 };
