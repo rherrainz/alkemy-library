@@ -44,10 +44,18 @@ const create = async (loan, arrayId) => {
     throw new ApiError("Book not found", 404);
   }
 
+    // Check if the book is already loaned
+    if (book.isLoaned) {
+      throw new ApiError("Book is already loaned", 400); //VER ESTO
+    }
+
   loan.userId = arrayId.user.id;
 
   //TODO: SE CREA EL PRÉSTAMO
   const loanCreated = await db.Loan.create(loan);
+
+    // Set isLoaned to true for the book
+    await book.update({ isLoaned: true });
 
   return loanCreated;
 };
