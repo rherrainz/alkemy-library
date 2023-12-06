@@ -24,5 +24,11 @@ router.patch(
   BookMiddleware.validateUpdate,
   BookController.update
 );
+router.patch(
+  "/return/:id",
+  isAdmin,
+  //BookMiddleware.validateUpdate,
+  BookController.returnBook
+);
 
 export default router;

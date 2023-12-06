@@ -89,6 +89,15 @@ const update = async (req, res, next) => {
   }
 };
 
+const returnBook = async (req, res, next) => {
+  try {
+    const result = await BookService.returnBook(req.params.id);
+    res.status(HTTP_STATUSES.ACCEPTED).json({ data: result });
+  } catch (error) {
+    next(new ApiError(error.message));
+  }
+};
+
 const remove = async (req, res, next) => {
   try {
     const result = await BookService.remove(req.params.id);
@@ -109,4 +118,5 @@ export const BookController = {
   remove,
   create,
   update,
+  returnBook
 };
