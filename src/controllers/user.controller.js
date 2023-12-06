@@ -8,7 +8,7 @@ const getAll = async (req, res, next) => {
     const result = await UserService.getAll(req.query.page);
     res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -17,7 +17,7 @@ const getByParams = async (req, res, next) => {
     const result = await UserService.getByParams(req.query);
     res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -26,7 +26,7 @@ const getById = async (req, res, next) => {
     const result = await UserService.getById(req.params.id);
     res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -40,15 +40,15 @@ const create = async (req, res, next) => {
       html: `<h1>Welcome ${result.firstName} ${result.lastName}!</h1>
       <p>You have been registered successfully!</p>
       <p>Your registered email is: ${result.email}</p>
-      <p>Enjoy our library!</p>`
-    }
+      <p>Enjoy our library!</p>`,
+    };
     transporter.sendMail(mailOptions, (error, info) => {
-      if(error) {
+      if (error) {
         console.log(error);
       } else {
         console.log("Email sent: " + info.response);
       }
-    })
+    });
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
     next(new ApiError(error.message));

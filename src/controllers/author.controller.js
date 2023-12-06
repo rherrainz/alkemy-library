@@ -7,7 +7,7 @@ const getAll = async (req, res, next) => {
     const result = await AuthorService.getAll();
     res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -16,7 +16,7 @@ const getByAuthorId = async (req, res, next) => {
     const result = await AuthorService.getByAuthorId(req.params.id);
     res.status(200).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -25,7 +25,7 @@ const create = async (req, res, next) => {
     const result = await AuthorService.create(req.body);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -34,7 +34,7 @@ const update = async (req, res, next) => {
     const result = await AuthorService.update(req.params.id);
     res.status(200).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -43,7 +43,7 @@ const remove = async (req, res, next) => {
     const result = await AuthorService.remove(req.params.id);
     res.status(200).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 

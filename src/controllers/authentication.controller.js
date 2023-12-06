@@ -10,7 +10,7 @@ const login = async (req, res, next) => {
     res.status(HTTP_STATUSES.OK).json({ token });
     info(email, "Inicio de sesión exitoso.");
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 

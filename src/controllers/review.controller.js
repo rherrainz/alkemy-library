@@ -25,7 +25,7 @@ const getByUserId = async (req, res, next) => {
     const result = await ReviewService.getByUserId(req.params.id);
     res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -34,7 +34,7 @@ const getByBookId = async (req, res, next) => {
     const result = await ReviewService.getByBookId(req.params.id);
     res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -43,7 +43,7 @@ const create = async (req, res, next) => {
     const result = await ReviewService.create(req.body, req.user);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
@@ -52,7 +52,7 @@ const update = async (req, res, next) => {
     const result = await ReviewService.update(req.params.id, req.body);
     res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 
