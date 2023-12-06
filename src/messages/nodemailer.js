@@ -8,8 +8,8 @@ const transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: PROCESS.env.MAILER_USER,
-        pass: PROCESS.env.MAILER_PASS
+        user: process.env.MAILER_USER,
+        pass: process.env.MAILER_PASS
 }});
 
-export default transporter;
+export { transporter };
