@@ -14,12 +14,12 @@ const getAll = async (req, res, next) => {
 
 const getByParams = async (req, res, next) => {
   try {
-    const result = await UserService.getByParams(req.query)
-    res.status(HTTP_STATUSES.OK).json({ data: result})
+    const result = await UserService.getByParams(req.query);
+    res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
-    next(new ApiError(error.message))
+    next(new ApiError(error.message));
   }
-}
+};
 
 const getById = async (req, res, next) => {
   try {

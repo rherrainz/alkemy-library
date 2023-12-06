@@ -1,35 +1,39 @@
 import { BookRepository } from "../repositories/book.repository.js";
 
-const getAll = async() => {
-    return await BookRepository.getAll();
-}
-
-const getOnlyLoan = async() => {
-    return await BookRepository.getOnlyLoan();
-}
-
-const getById = async(id) => {
-    return await BookRepository.getById(id)
-}
-
-const getByAuthorId = async(authorId) => {
-    return await BookRepository.getByAuthorId(authorId)
-}
-
-const getByLanguageId = async(languageId) => {
-    return await BookRepository.getByLanguageId(languageId)
-}
-
-const getByGenreId = async(genreId) => {
-    return await BookRepository.getByGenreId(genreId)
-}
-
-const getByAuthorOrTitle = async(author, title) => {
-    return await BookRepository.getByAuthorOrTitle(author, title);
+const getAll = async () => {
+  return await BookRepository.getAll();
 };
 
-const create = async (book, {authorId, genreId, languageId}) => {
-  return await BookRepository.create(book, {authorId, genreId, languageId});
+const getAllActive = async () => {
+  return await BookRepository.getAllActive();
+};
+
+const getOnlyLoan = async () => {
+  return await BookRepository.getOnlyLoan();
+};
+
+const getById = async (id) => {
+  return await BookRepository.getById(id);
+};
+
+const getByAuthorId = async (authorId) => {
+  return await BookRepository.getByAuthorId(authorId);
+};
+
+const getByLanguageId = async (languageId) => {
+  return await BookRepository.getByLanguageId(languageId);
+};
+
+const getByGenreId = async (genreId) => {
+  return await BookRepository.getByGenreId(genreId);
+};
+
+const getByAuthorOrTitle = async (author, title) => {
+  return await BookRepository.getByAuthorOrTitle(author, title);
+};
+
+const create = async (book, { authorId, genreId, languageId }) => {
+  return await BookRepository.create(book, { authorId, genreId, languageId });
 };
 
 const update = async (id, book) => {
@@ -41,14 +45,15 @@ const remove = async (id) => {
 };
 
 export const BookService = {
-    getAll,
-    getOnlyLoan,
-    getById,
-    getByAuthorId,
-    getByLanguageId,
-    getByGenreId,
-    getByAuthorOrTitle,
-    create,
-    update,
-    remove
-}
+  getAll,
+  getAllActive,
+  getOnlyLoan,
+  getById,
+  getByAuthorId,
+  getByLanguageId,
+  getByGenreId,
+  getByAuthorOrTitle,
+  create,
+  update,
+  remove,
+};

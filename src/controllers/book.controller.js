@@ -3,22 +3,31 @@ import { BookService } from "../services/book.service.js";
 import ApiError from "../errors/api.error.js";
 
 const getAll = async (req, res, next) => {
-    try {
-        const result = await BookService.getAll();
-        res.status(HTTP_STATUSES.OK).json({ data: result });
-    } catch (error) {
-        next(new ApiError(error.message));
-    }
+  try {
+    const result = await BookService.getAll();
+    res.status(HTTP_STATUSES.OK).json({ data: result });
+  } catch (error) {
+    next(new ApiError(error.message));
+  }
+};
+
+const getAllActive = async (req, res, next) => {
+  try {
+    const result = await BookService.getAllActive();
+    res.status(HTTP_STATUSES.OK).json({ data: result });
+  } catch (error) {
+    next(new ApiError(error.message));
+  }
 };
 
 const getOnlyLoan = async (req, res, next) => {
-    try {
-        const result = await BookService.getOnlyLoan();
-        res.status(HTTP_STATUSES.OK).json({ data: result });
-    } catch (error) {
-        next(new ApiError(error.message));
-    }
-}
+  try {
+    const result = await BookService.getOnlyLoan();
+    res.status(HTTP_STATUSES.OK).json({ data: result });
+  } catch (error) {
+    next(new ApiError(error.message));
+  }
+};
 
 const getById = async (req, res, next) => {
   try {
@@ -90,13 +99,14 @@ const remove = async (req, res, next) => {
 };
 
 export const BookController = {
-    getAll,
-    getOnlyLoan,
-    getById,
-    getByAuthorId,
-    getByGenreId,
-    getByAuthorOrTitle,
-    remove,
-    create,
-    update
-}
+  getAll,
+  getAllActive,
+  getOnlyLoan,
+  getById,
+  getByAuthorId,
+  getByGenreId,
+  getByAuthorOrTitle,
+  remove,
+  create,
+  update,
+};
