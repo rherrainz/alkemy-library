@@ -1,4 +1,6 @@
 import { LoanRepository } from "../repositories/loan.repository.js";
+import { transporter } from "../messages/nodemailer.js";
+import { messages } from "../messages/messages.js";
 
 const getAll = async () => {
   return await LoanRepository.getAll();
@@ -29,7 +31,16 @@ const getByDueDate = async (dueDate) => {
 }
 
 const create = async (loan, arrayId) => {
-  return await LoanRepository.create(loan, arrayId);
+  const newLoan = await LoanRepository.create(loan, arrayId);
+  const message = newLoanMessage(newLoan);
+  transporter.sendMail(message, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+  return newLoan;
 };
 
 const update = async (id, arrayId) => {
