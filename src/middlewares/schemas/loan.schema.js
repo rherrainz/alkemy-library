@@ -4,7 +4,7 @@ import { Schemas } from "./index.schema.js";
 export const schemaLoan = {
   create: Joi.object().keys({
     startDate: Schemas.Date,
-    dueDate: Schemas.Date,
+    dueDate: Schemas.dueDate,
     bookId: Schemas.Id,
   }),
   update: Joi.object().keys({

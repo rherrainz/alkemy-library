@@ -93,6 +93,9 @@ export const Schemas = {
   Date: Joi.date().iso().max("now").required().messages(messageDate),
   DateUpdate: Joi.date().iso().max("now").messages(messageDate),
 
+  //Loan
+  dueDate: Joi.date().iso().required().messages(messageDate),
+
   //User
   Email: Joi.string().min(2).max(30).required().email().messages(messageEmail),
   EmailUpdate: Joi.string().min(2).max(30).email().messages(messageEmail),
