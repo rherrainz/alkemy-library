@@ -1,11 +1,11 @@
 import cron from "node-cron";
-import { LoanController } from "../controllers/loan.controller.js";
+import { LoanService } from "../services/loan.service.js";
 import { transporter } from "../messages/nodemailer.js";
 
 const cronTask = cron.schedule("0 0 0 * * *", () => {
   let today = Date.now();
   today = today.toISOString().slice(0, 10);
-  const dueLoans = LoanController.getByDueDate(today);
+  const dueLoans = LoanService.getByDueDate(today);
   dueLoans.forEach((loan) => {
     const mailOptions = {
       from: "Alkemy Library",
