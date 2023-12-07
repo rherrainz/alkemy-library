@@ -40,8 +40,12 @@ const update = async (id, book) => {
   return await BookRepository.update(id, book);
 };
 
-const returnBook = async (id) => {
-  return await BookRepository.returnBook(id);
+const returnBook = async (id, io) => {
+  const result = await BookRepository.returnBook(id);
+
+  //Emitir el evento al cliente
+  io.emit('notification', {text: `El libro ${result.title} está disponible en la versión ${result.edition}`});
+  return result;
 };
 
 const remove = async (id) => {

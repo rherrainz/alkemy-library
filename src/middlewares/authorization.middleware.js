@@ -40,7 +40,7 @@ export const isAdmin = async (req, res, next) => {
     const { id, email, role, isActive } = await decode(bearerToken);
 
     //ROL DEL USUARIO DEL PAYLOAD DEL TOKEN
-    if (role == ROLE.ADMIN) {
+    if (role == ROLE.ADMIN || role == ROLE.SUPADMIN) {
       const user = {
         id,
         email,

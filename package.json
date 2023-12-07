@@ -10,7 +10,8 @@
     "mysql2": "^3.6.5",
     "nodemailer": "^6.9.7",
     "nodemon": "^3.0.1",
-    "sequelize": "^6.35.1"
+    "sequelize": "^6.35.1",
+    "socket.io": "^4.7.2"
   },
   "name": "alkemy-library",
   "version": "1.0.0",

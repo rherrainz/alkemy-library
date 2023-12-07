@@ -175,12 +175,21 @@ const update = async (id, book) => {
 };
 
 const returnBook = async (id) => {
-  return db.Book.update(
-    {
-      isLoaned: false,
-    },
-    { where: { id: id } }
-  );
+  try {
+    const book = await db.Book.findByPk(id);
+
+    await book.update(
+      {
+        isLoaned: false,
+      },
+    );
+    
+    //Devolver los datos del libro que vuelve a estar disponible
+    const {title, edition} = book.toJSON();
+    return {title, edition}
+  } catch (error) {
+    throw error;
+  }
 };
 
 const remove = async (id) => {
