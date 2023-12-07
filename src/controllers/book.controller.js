@@ -89,9 +89,9 @@ const update = async (req, res, next) => {
   }
 };
 
-const returnBook = async (req, res, next) => {
+const returnBook = async (req, res, next, io) => {
   try {
-    const result = await BookService.returnBook(req.params.id);
+    const result = await BookService.returnBook(req.params.id, io);
     res.status(HTTP_STATUSES.ACCEPTED).json({ data: result });
   } catch (error) {
     next(error);

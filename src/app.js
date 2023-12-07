@@ -5,8 +5,16 @@ import { db } from "./db/index.db.js";
 import indexRouter from "./routes/index.route.js";
 import ApiError from "./errors/api.error.js";
 
-//npm install --dev prettier
-//npm run format
+import http from "http";
+import { Server } from 'socket.io';
+import { NotificationSettings } from './realtime/notifiy.realtime.js'
+
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+app.set('io', io);
 
 try {
   await db.sequelize.authenticate();
@@ -18,7 +26,26 @@ try {
   console.log(`Unable to connect to the database: ${error}`);
 }
 
-const app = express();
+//Se crea una instancia de la case que contiene la conf del socket
+const notifyEvent = (socket) => {
+  console.log('Comportamiento personalizado para el nuevo socket', socket.id);
+  // Aquí puedes agregar cualquier lógica específica para el nuevo socket
+};
+
+new NotificationSettings(io, notifyEvent);
+
+// io.on('connection', (socket) => {
+//   console.log(`Usuario conectado`);
+  
+//   socket.on('notification', (msg) => {
+//     console.log('Notificación recibida:', msg);
+//   });
+
+//   socket.on('disconnect', () => {
+//     console.log(`Usuario desconectado`);
+//   });
+// });
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -53,6 +80,6 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log("Listening on port 3000");
+server.listen(PORT, () => {
+  console.log("Listening on port ", PORT);
 });

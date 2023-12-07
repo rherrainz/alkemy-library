@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get("/", isAuthenticated, UserController.getAll);
 router.get("/params", isAuthenticated, UserController.getByParams);
-router.post("/", UserMiddleware.validateCreate, UserController.create);
+router.post("/", UserController.create);
 router.get("/:id", isAdmin, UserController.getById);
 router.delete("/:id", isSupAdmin, UserController.deleteById);
 
