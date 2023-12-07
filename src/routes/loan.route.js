@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.get("/", isAdmin, LoanController.getAll);
 router.get("/:id", isAdmin, LoanController.getById);
+router.get("/dueDate/:dueDate", isAdmin, LoanController.getByDueDate);
 router.post(
   "/",
   isAuthenticated,

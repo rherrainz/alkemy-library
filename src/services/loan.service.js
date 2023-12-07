@@ -24,6 +24,10 @@ const getByGenreId = async (genreId) => {
   return await LoanRepository.getByGenreId(genreId);
 };
 
+const getByDueDate = async (dueDate) => {
+  return await LoanRepository.getByDueDate(dueDate);
+}
+
 const create = async (loan, arrayId) => {
   return await LoanRepository.create(loan, arrayId);
 };
@@ -43,6 +47,7 @@ export const LoanService = {
   getByBookId,
   getByLanguageId,
   getByGenreId,
+  getByDueDate,
   create,
   update,
   remove,

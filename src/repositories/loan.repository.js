@@ -37,6 +37,10 @@ const getByBookId = async (bookId) => {
   return await db.Loan.find({ bookId: bookId });
 };
 
+const getByDueDate = async (dueDate) => {
+  return await db.Loan.find({ dueDate: dueDate });
+}
+
 const create = async (loan, arrayId) => {
   //TODO: PRIMERO SE DEBE VERIFICAR QUE EXISTA EL LIBRO Y EL USUARIO
   const book = await db.Book.findByPk(arrayId.bookId);
@@ -76,6 +80,7 @@ export const LoanRepository = {
   getById,
   getByUserId,
   getByBookId,
+  getByDueDate,
   create,
   update,
 };

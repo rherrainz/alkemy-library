@@ -22,6 +22,15 @@ const getById = async (req, res, next) => {
   }
 };
 
+const getByDueDate = async (req, res, next) => {
+  try {
+    const result = await LoanService.getByDueDate(req.params.dueDate);
+    res.status(HTTP_STATUSES.OK).json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const create = async (req, res, next) => {
   try {
     const user = req.user;
@@ -72,6 +81,7 @@ const edit = async (req, res, next) => {
 export const LoanController = {
   getAll,
   getById,
+  getByDueDate,
   create,
   edit,
   remove,

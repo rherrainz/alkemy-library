@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { db } from "./db/index.db.js";
 import indexRouter from "./routes/index.route.js";
 import ApiError from "./errors/api.error.js";
+import { dueReminder } from "./utils/cron.util.js";
 
 //npm install --dev prettier
 //npm run format
@@ -52,6 +53,9 @@ app.use((err, req, res, next) => {
     res.status(500).json({ status: 500, error: err.message });
   }
 });
+
+//dueReminder => envía un mail a cada usuario que debe un libro
+dueReminder();
 
 app.listen(PORT, () => {
   console.log("Listening on port 3000");
