@@ -9,6 +9,7 @@ import loanRouter from "./loan.route.js";
 import reviewRouter from "./review.route.js";
 import genreRouter from "./genre.route.js";
 import languageRouter from "./language.route.js";
+import chatRouter from "./chat.route.js";
 
 router.use("/user", userRouter);
 router.use("/login", authenticationRouter);
@@ -18,5 +19,6 @@ router.use("/loan", loanRouter);
 router.use("/genre", genreRouter);
 router.use("/language", languageRouter);
 router.use("/review", reviewRouter);
+router.use("/chat", chatRouter);
 
 export default router;
