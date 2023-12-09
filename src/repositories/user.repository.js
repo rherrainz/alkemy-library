@@ -32,6 +32,13 @@ const getById = async (id) => {
   return await db.User.findByPk(id);
 };
 
+const getUsersEmails =  async () => {
+  const allUsersEmails = await db.User.findAll({
+    attributes: ['email']
+  });
+  return allUsersEmails;
+};
+
 const create = async (user) => {
   return await db.User.create(user);
 };
@@ -67,6 +74,7 @@ export const UserRepository = {
   getAll,
   getByParams,
   getById,
+  getUsersEmails,
   create,
   update,
   remove,

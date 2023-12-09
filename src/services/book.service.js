@@ -1,4 +1,6 @@
 import { BookRepository } from "../repositories/book.repository.js";
+import { messages } from "../messages/messages.js";
+import { transporter } from "../messages/nodemailer.js";
 
 const getAll = async () => {
   return await BookRepository.getAll();
@@ -32,8 +34,18 @@ const getByAuthorOrTitle = async (author, title) => {
   return await BookRepository.getByAuthorOrTitle(author, title);
 };
 
-const create = async (book, { authorId, genreId, languageId }) => {
-  return await BookRepository.create(book, { authorId, genreId, languageId });
+const create = async (book, { authorId, genreId, languageId }) => 
+{
+  const newBook = await BookRepository.create(book, { authorId, genreId, languageId });
+  const message = messages.newBookMessage(newBook);
+  transporter.sendMail(message, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+  return newBook;
 };
 
 const update = async (id, book) => {
