@@ -32,7 +32,7 @@ const getByDueDate = async (dueDate) => {
 
 const create = async (loan, arrayId) => {
   const newLoan = await LoanRepository.create(loan, arrayId);
-  const message = newLoanMessage(newLoan);
+  const message = messages.newLoanMessage(newLoan);
   transporter.sendMail(message, (error, info) => {
     if (error) {
       console.log(error);

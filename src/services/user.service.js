@@ -34,6 +34,10 @@ const getById = async (id) => {
   return await UserRepository.getById(id);
 };
 
+const getUsersEmails = async () => {
+  return await UserRepository.getUsersEmails();
+}
+
 const create = async (user) => {
   const hashedPassword = await hashPassword(user.password);
   user.password = hashedPassword;
@@ -61,6 +65,7 @@ export const UserService = {
   getAll,
   getByParams,
   getById,
+  getUsersEmails,
   create,
   update,
   deleteById,

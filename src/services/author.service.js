@@ -1,4 +1,6 @@
 import { AuthorRepository } from "../repositories/author.repository.js";
+import { messages } from "../messages/messages.js";
+import { transporter } from "../messages/nodemailer.js";
 
 const getAll = async () => {
   return await AuthorRepository.getAll();
@@ -9,7 +11,16 @@ const getByAuthorId = async (id) => {
 };
 
 const create = async (author) => {
-  return await AuthorRepository.create(author);
+  const newAuthor = await AuthorRepository.create(author);
+  const message = messages.newAuthorMessage(newAuthor);
+  transporter.sendMail(message, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+  return newAuthor;
 };
 
 const update = async (id, author) => {

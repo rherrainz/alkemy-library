@@ -1,3 +1,5 @@
+import { UserService } from "../services/user.service.js";
+
 const dueLoansMessage = (loan) => {
     const message = {
         from: "Alkemy Library",
@@ -45,10 +47,41 @@ const newUserMessage = (user) => {
       return message;
 }
 
+const newAuthorMessage = (author) => {
+    const allUsersEmails = UserService.getUsersEmails();
+    for (let i = 0; i < allUsersEmails.length; i++) {
+        const message = {
+            from: "Alkemy Library",
+            to: allUsersEmails[i],
+            subject: "New author registered",
+            html: `<h1>New author registered!</h1>
+            <p>The author ${author.firstName} ${author.lastName} has been registered successfully!</p>
+            <p>Enjoy our library!</p>`,
+        };
+        return message;
+    }
+}
+
+const newBookMessage = (book) => {
+    const allUsersEmails = UserService.getUsersEmails();
+    for (let i = 0; i < allUsersEmails.length; i++) {
+        const message = {
+            from: "Alkemy Library",
+            to: allUsersEmails[i],
+            subject: "New book registered",
+            html: `<h1>New book registered!</h1>
+            <p>The book ${book.title} has been registered successfully!</p>
+            <p>Enjoy our library!</p>`,
+        };
+        return message;
+    }
+}
 
 
 export default messages = {
     dueLoansMessage,
     newLoanMessage,
-    newUserMessage
+    newUserMessage,
+    newAuthorMessage,
+    newBookMessage
 };
