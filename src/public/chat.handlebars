@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <style>
+    .message-container-sent {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 5px;
+    }
+
+    .sent-message {
+      background-color: #87cefa;
+      border-radius: 10px;
+      padding: 10px;
+      width: 50%;
+      word-wrap: break-word;
+    }
+
+    .message-container-received {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 5px;
+    }
+
+    .received-message {
+      background-color: #ffc0cb;
+      border-radius: 10px;
+      padding: 10px;
+      width: 50%;
+      word-wrap: break-word;
+    }
+
+    #user-list {
+      padding: 10px;
+    }
+
+    .list-group-item {
+      border: none;
+      background-color: #f8f9fa;
+    }
+
+    #user-count {
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <div class="row">
+
+      <div class="col-md-3">
+        <h4>Usuarios en línea</h4>
+        <ul id="user-list" class="list-group" style="height: 300px; overflow-y: auto">
+        </ul>
+        <p>Cantidad de usuarios: <span id="user-count">0</span></p>
+      </div>
+
+      <div class="col-md-9">
+        <div class="card">
+          <div class="card-body" style="height: 500px; overflow-y: auto" id="chat-messages"></div>
+        </div>
+        <div class="input-group mt-3">
+          <input type="text" class="form-control" id="message-input" placeholder="Escribe tu mensaje..." />
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button" onclick="sendMessage()">Enviar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
+
+  <script>
+
+    const userId = "{{userData.id}}";
+    let socket;
+    let currentUser;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      socket = io();
+
+      const userName = "{{userData.firstName}} {{userData.lastName}}";
+      currentUser = userName;
+
+      socket.emit('join', { id: userId, name: userName });
+
+      socket.on("chatMessage", function (message) {
+        const isSentByCurrentUser = message.sender === userId;
+
+        const senderName = isSentByCurrentUser ? 'Tú' : message.senderName;
+
+        $('#chat-messages').append(
+          `<div class="${isSentByCurrentUser ? 'message-container-sent' : 'message-container-received'}">
+          <div class="${isSentByCurrentUser ? 'sent-message' : 'received-message'}">
+            <div>
+              <strong>${senderName}</strong>
+            </div>
+            ${message.text}
+          </div>
+        </div>`
+        );
+      });
+
+      // Actualiza la lista de usuarios conectados
+      socket.on("userList", function (users) {
+        $("#user-list").empty();
+
+        users.forEach(function (user) {
+          $("#user-list").append(`<li class="list-group-item" data-user-id="${user.id}">${user.name}</li>`);
+        });
+      });
+
+      // Actualiza la cantidad de usuarios conectados
+      socket.on("userCount", function (count) {
+        $("#user-count").text(count);
+      });
+    });
+
+    function sendMessage() {
+      const messageText = $("#message-input").val();
+      if (messageText.trim() !== "") {
+        socket.emit("chatMessage", {
+          text: messageText,
+        });
+
+        $("#message-input").val("");
+      }
+    }
+
+    function updateUsers(users) {
+      $('#user-list').empty();
+      users.forEach(user => {
+        $('#user-list').append(`<div>${user}</div>`);
+      });
+    }
+  </script>
+</body>
+
+</html>
