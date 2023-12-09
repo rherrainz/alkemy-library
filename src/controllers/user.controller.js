@@ -1,7 +1,6 @@
 import { HTTP_STATUSES } from "../constants/http.js";
 import { UserService } from "../services/user.service.js";
 import ApiError from "../errors/api.error.js";
-import { transporter } from "../messages/nodemailer.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -32,23 +31,7 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const result = await UserService.create(req.body);
-    const mailOptions = {
-      from: "Alkemy Library",
-      to: result.email,
-      subject: "Welcome to Alkemy Library",
-      html: `<h1>Welcome ${result.firstName} ${result.lastName}!</h1>
-      <p>You have been registered successfully!</p>
-      <p>Your registered email is: ${result.email}</p>
-      <p>Enjoy our library!</p>`,
-    };
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-      }
-    });
+    const result = await UserService.create(req.body);   
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
     next(new ApiError(error.message));

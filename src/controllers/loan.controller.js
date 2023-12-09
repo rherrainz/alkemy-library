@@ -2,7 +2,6 @@ import { HTTP_STATUSES } from "../constants/http.js";
 import { LoanService } from "../services/loan.service.js";
 import ApiError from "../errors/api.error.js";
 import { info } from "../log/logger.log.js";
-import { transporter } from "../messages/nodemailer.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -22,29 +21,21 @@ const getById = async (req, res, next) => {
   }
 };
 
+const getByDueDate = async (req, res, next) => {
+  try {
+    const result = await LoanService.getByDueDate(req.params.dueDate);
+    res.status(HTTP_STATUSES.OK).json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const create = async (req, res, next) => {
   try {
     const user = req.user;
     const { bookId } = req.body;
     const result = await LoanService.create(req.body, { user, bookId });
     info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
-    const mailOptions = {
-      from: "Alkemy Library",
-      to: user.email,
-      subject: "Loan completed",
-      html: `<h1>Loan completed succesfully!</h1>
-      <p>The book ${bookId} has been reserved for you.</p>
-      <p>From: ${result.startDate}</p>
-      <p>To: ${result.dueDate}</p>
-      <p>Enjoy our library!</p>`,
-    };
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-      }
-    });
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
     next(error);
@@ -72,6 +63,7 @@ const edit = async (req, res, next) => {
 export const LoanController = {
   getAll,
   getById,
+  getByDueDate,
   create,
   edit,
   remove,

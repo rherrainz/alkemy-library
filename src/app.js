@@ -5,6 +5,7 @@ import { db } from "./db/index.db.js";
 import indexRouter from "./routes/index.route.js";
 import ApiError from "./errors/api.error.js";
 import exphbs from "express-handlebars";
+import { dueReminder } from "./utils/cron.util.js";
 
 import http from "http";
 import { Server } from "socket.io";
@@ -74,6 +75,9 @@ app.use((err, req, res, next) => {
     res.status(500).json({ status: 500, error: err.message });
   }
 });
+
+//dueReminder => envía un mail a cada usuario que debe un libro
+dueReminder();
 
 server.listen(PORT, () => {
   console.log("Listening on port ", PORT);

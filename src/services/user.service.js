@@ -1,6 +1,8 @@
 import { UserRepository } from "../repositories/user.repository.js";
 import { hashPassword, comparePassword } from "../utils/password.util.js";
 import ApiError from "../errors/api.error.js";
+import { transporter } from "../messages/nodemailer.js";
+import { messages } from "../messages/messages.js";
 
 //MÉTODO UTILIZADO EN EL AUTH SERVICE
 const findUserByEmailAndPassword = async (email, password) => {
@@ -35,6 +37,14 @@ const getById = async (id) => {
 const create = async (user) => {
   const hashedPassword = await hashPassword(user.password);
   user.password = hashedPassword;
+  const message = messages.newUserMessage(user);
+  transporter.sendMail(message, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
   return await UserRepository.create(user);
 };
 
