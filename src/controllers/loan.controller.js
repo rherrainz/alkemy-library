@@ -34,7 +34,11 @@ const create = async (req, res, next) => {
   try {
     const user = req.user;
     const { bookId } = req.body;
-    const result = await LoanService.create(req.body, { user, bookId });
+    const result = await LoanService.create(
+      req.body,
+      { user, bookId },
+      user.email
+    );
     info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {

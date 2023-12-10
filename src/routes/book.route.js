@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.get("/", isAuthenticated, BookController.getAllActive);
 router.get("/all", isAdmin, BookController.getAll);
+router.get("/params", isAuthenticated, BookController.getByParams);
 router.get("/loan", isAdmin, BookController.getOnlyLoan);
 router.get("/:id", isAuthenticated, BookController.getById);
 router.get("/author/:id", isAuthenticated, BookController.getByAuthorId);
@@ -24,6 +25,8 @@ router.patch(
   BookMiddleware.validateUpdate,
   BookController.update
 );
-router.patch("/return/:id", isAdmin, (req, res, next) => BookController.returnBook(req, res, next, req.app.get('io')));
+router.patch("/return/:id", isAdmin, (req, res, next) =>
+  BookController.returnBook(req, res, next, req.app.get("io"))
+);
 
 export default router;

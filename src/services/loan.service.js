@@ -28,11 +28,11 @@ const getByGenreId = async (genreId) => {
 
 const getByDueDate = async (dueDate) => {
   return await LoanRepository.getByDueDate(dueDate);
-}
+};
 
-const create = async (loan, arrayId) => {
+const create = async (loan, arrayId, email) => {
   const newLoan = await LoanRepository.create(loan, arrayId);
-  const message = messages.newLoanMessage(newLoan);
+  const message = messages.newLoanMessage(newLoan, email);
   transporter.sendMail(message, (error, info) => {
     if (error) {
       console.log(error);

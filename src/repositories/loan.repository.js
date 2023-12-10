@@ -30,16 +30,27 @@ const getById = async (id) => {
 };
 
 const getByUserId = async (userId) => {
-  return await db.Loan.find({ userId: userId });
+  return await db.Loan.findAll({ where: { userId: userId } });
 };
 
 const getByBookId = async (bookId) => {
-  return await db.Loan.find({ bookId: bookId });
+  return await db.Loan.findAll({ where: { bookId: bookId } });
 };
 
 const getByDueDate = async (dueDate) => {
-  return await db.Loan.find({ dueDate: dueDate });
-}
+  return await db.Loan.findAll({
+    include: [
+      {
+        model: db.User,
+        attributes: ["email"],
+      },
+    ],
+    where: { dueDate: dueDate },
+    raw: true,
+  });
+
+  // console.log(result[0]["user.email"]);
+};
 
 const create = async (loan, arrayId) => {
   //TODO: PRIMERO SE DEBE VERIFICAR QUE EXISTA EL LIBRO Y EL USUARIO
