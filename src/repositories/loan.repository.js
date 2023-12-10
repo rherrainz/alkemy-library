@@ -52,6 +52,21 @@ const getByDueDate = async (dueDate) => {
   // console.log(result[0]["user.email"]);
 };
 
+const getOldDueLoans = async () => {
+  const date = new Date();
+  date.setDate(date.getDate());
+  return await db.Loan.findAll({
+    include: [
+      {
+        model: db.User,
+        attributes: ["email"],
+      },
+    ],
+    where: { isReturned: false , dueDate: !date},
+    raw: true,
+  });
+};
+
 const create = async (loan, arrayId) => {
   //TODO: PRIMERO SE DEBE VERIFICAR QUE EXISTA EL LIBRO Y EL USUARIO
   const book = await db.Book.findByPk(arrayId.bookId);
@@ -92,6 +107,7 @@ export const LoanRepository = {
   getByUserId,
   getByBookId,
   getByDueDate,
+  getOldDueLoans,
   create,
   update,
 };

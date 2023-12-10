@@ -30,6 +30,10 @@ const getByDueDate = async (dueDate) => {
   return await LoanRepository.getByDueDate(dueDate);
 };
 
+const getOldDueLoans = async () => {
+  return await LoanRepository.getOldDueLoans();
+};
+
 const create = async (loan, arrayId, email) => {
   const newLoan = await LoanRepository.create(loan, arrayId);
   const message = messages.newLoanMessage(newLoan, email);
@@ -59,6 +63,7 @@ export const LoanService = {
   getByLanguageId,
   getByGenreId,
   getByDueDate,
+  getOldDueLoans,
   create,
   update,
   remove,
