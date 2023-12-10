@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
 
+//Esta constante tendrá los argumentos que se pasan cuando el script se ejecuta desde CMD
+const arg = process.argv[2];
 
 //Formateo de fecha para concatenarlo al nombre del backup y evitar la sobreescritura
 const now = new Date();
@@ -73,19 +75,31 @@ const performBackup = async(fullOutputPath) => {
         //Subir la copia de seguridad a Dropbox
         const dropboxResponse = await uploadBackupToDropbox(fileContent, outputFile, dropboxAccessToken);
 
-        console.log('Copia de seguridad cargada en Dropbox con éxito:', dropboxResponse);
-        
-         // Eliminar el archivo de respaldo local
-        await fs.promises.unlink(fullOutputPath);
+        if(dropboxResponse){
+            console.log('Copia de seguridad cargada en Dropbox con éxito:', dropboxResponse);
+            // Eliminar el archivo de respaldo local
+            await fs.promises.unlink(fullOutputPath);
+        } else {
+            console.log('Error al intentar subir la copia de seguridad a dropbox:', dropboxResponse);
+        }
     } catch (error) 
     {
         console.log(error);
     }
 }
 
-//Verificar si la ruta existe
-if (!fs.existsSync(path.join(currentDir, outputPath))) {
-    console.error(`La ruta ${outputPath} no existe. Crea el directorio antes de ejecutar la copia de seguridad.`);
-} else {
-    performBackup(fullOutputPath)
+//Método exportado para implementarlo en una tarea automatizada
+const backup = (arg) => {
+    if(arg){
+        //Verificar si la ruta existe
+        if (!fs.existsSync(path.join(currentDir, outputPath))) {
+            console.error(`La ruta ${outputPath} no existe. Crea el directorio antes de ejecutar la copia de seguridad.`);
+        } else {
+            performBackup(fullOutputPath)
+        }
+    }
 }
+
+backup(arg)
+
+export default backup;
