@@ -5,7 +5,7 @@ import { db } from "./db/index.db.js";
 import indexRouter from "./routes/index.route.js";
 import ApiError from "./errors/api.error.js";
 import exphbs from "express-handlebars";
-import cronTask from "./utils/cron.util.js";
+import {CronTask} from "./utils/cron.util.js";
 import backupTask from "./tasks/backup.task.js"
 
 import http from "http";
@@ -77,8 +77,10 @@ app.use((err, req, res, next) => {
   }
 });
 
-//Ejecuta función cronTask que envia mensajes de prestamos vencidos
-cronTask();
+//Ejecuta función cronTask que envia mensajes de prestamos vencidos en el día
+CronTask.dailyDues();
+//Ejecuta función cronTask que envia mensajes de prestamos vencidos hace más de un día
+CronTask.oldDues();
 backupTask(); //Invoca a una tarea que automatiza el backup de la DB
 
 server.listen(PORT, () => {
