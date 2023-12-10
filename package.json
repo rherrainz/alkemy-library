@@ -11,6 +11,7 @@
     "jsonwebtoken": "^9.0.2",
     "mssql": "^10.0.1",
     "mysql2": "^3.6.5",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.9.7",
     "nodemon": "^3.0.1",
     "sequelize": "^6.35.1",
@@ -22,7 +23,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon src/app.js",
-    "backup": "nodemon src/security/backup.security.js",
+    "backup": "node src/security/backup.security.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write ."
   },

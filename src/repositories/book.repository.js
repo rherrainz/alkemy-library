@@ -1,6 +1,7 @@
 /*TODO: IMPORTACIÓN DE INDEX.DB */
 import ApiError from "../errors/api.error.js";
 import { db } from "./../db/index.db.js";
+import { Op } from "sequelize";
 
 //ACCIÓN CON PRIVILEGIOS
 const getAll = async () => {
@@ -41,6 +42,47 @@ const getAllActive = async () => {
       isActive: true,
     },
   });
+};
+
+const getByParams = async (
+  authorName = "",
+  bookTitle = "",
+  genreName = "",
+  options
+) => {
+  const books = await db.Book.findAll({
+    include: [
+      {
+        model: db.Author,
+        // Muestro los atributos firstName y lastName
+        attributes: ["firstName", "lastName"],
+        through: { attributes: [] },
+        where: {
+          [Op.or]: [
+            { firstName: { [Op.like]: `%${authorName}%` } },
+            { lastName: { [Op.like]: `%${authorName}%` } },
+          ],
+        },
+      },
+      {
+        model: db.Genre,
+        // Muestro el atributo genre
+        attributes: ["genre"],
+        through: { attributes: [] },
+        where: {
+          genre: { [Op.like]: `%${genreName}%` },
+        },
+      },
+    ],
+    where: {
+      // Coloque Op.or para el caso en que no se indique un title
+      [Op.or]: [{ title: { [Op.like]: `%${bookTitle}%` } }],
+    },
+    //Utilizo el spread operator para separar los parametros offset y limit
+    ...options,
+  });
+
+  return books;
 };
 
 //TODO: RETORNA TODOS LOS LIBROS QUE ESTÉN EN PRÉSTAMO ORDENADOS DE MANERA ASC SEGÚN FECHA DE SOLICITUD
@@ -178,15 +220,13 @@ const returnBook = async (id) => {
   try {
     const book = await db.Book.findByPk(id);
 
-    await book.update(
-      {
-        isLoaned: false,
-      },
-    );
-    
+    await book.update({
+      isLoaned: false,
+    });
+
     //Devolver los datos del libro que vuelve a estar disponible
-    const {title, edition} = book.toJSON();
-    return {title, edition}
+    const { title, edition } = book.toJSON();
+    return { title, edition };
   } catch (error) {
     throw error;
   }
@@ -204,6 +244,7 @@ const remove = async (id) => {
 export const BookRepository = {
   getAll,
   getAllActive,
+  getByParams,
   getOnlyLoan,
   getById,
   getByAuthorId,

@@ -20,6 +20,21 @@ const getAllActive = async (req, res, next) => {
   }
 };
 
+const getByParams = async (req, res, next) => {
+  try {
+    const { authorName, bookTitle, genreName, page } = req.query;
+    const result = await BookService.getByParams(
+      authorName,
+      bookTitle,
+      genreName,
+      +page
+    );
+    res.status(HTTP_STATUSES.OK).json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getOnlyLoan = async (req, res, next) => {
   try {
     const result = await BookService.getOnlyLoan();
@@ -110,6 +125,7 @@ const remove = async (req, res, next) => {
 export const BookController = {
   getAll,
   getAllActive,
+  getByParams,
   getOnlyLoan,
   getById,
   getByAuthorId,

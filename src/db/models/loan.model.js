@@ -10,15 +10,21 @@ const loan = (sequelize) => {
         primaryKey: true,
       },
       startDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
+        validate: {
+          isDate: true,
+        },
       },
       dueDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
+        validate: {
+          isDate: true,
+        },
       },
     },
-    { timestamps: true },
+    { timestamps: true }
   );
   Loan.associate = (models) => {
     Loan.belongsTo(models.User);
