@@ -62,9 +62,17 @@ const getOldDueLoans = async () => {
         attributes: ["email"],
       },
     ],
-    where: { isReturned: false , dueDate: !date},
+    where: { isReturned: false, dueDate: !date },
     raw: true,
   });
+};
+
+const getActiveLoansByUserId = async (userId) => {
+  const activeLoans = await db.Loan.findAll({
+    where: { userId: userId, isReturned: false },
+  });
+  const nuberOfActiveLoans = activeLoans.length;
+  return nuberOfActiveLoans;
 };
 
 const create = async (loan, arrayId) => {
@@ -108,6 +116,7 @@ export const LoanRepository = {
   getByBookId,
   getByDueDate,
   getOldDueLoans,
+  getActiveLoansByUserId,
   create,
   update,
 };
