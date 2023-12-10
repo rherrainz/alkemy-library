@@ -5,7 +5,7 @@ import {
   isAdmin,
   isSupAdmin,
 } from "../middlewares/authorization.middleware.js";
-//import { BookMiddleware } from "../middlewares/book.middleware.js";
+//import { EventMiddleware } from "../middlewares/event.middleware.js";
 
 const router = express.Router();
 
