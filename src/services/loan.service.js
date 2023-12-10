@@ -1,6 +1,7 @@
 import { LoanRepository } from "../repositories/loan.repository.js";
 import { transporter } from "../messages/nodemailer.js";
 import { messages } from "../messages/messages.js";
+import book from "../db/models/book.model.js";
 
 const getAll = async () => {
   return await LoanRepository.getAll();
@@ -30,7 +31,13 @@ const getByDueDate = async (dueDate) => {
   return await LoanRepository.getByDueDate(dueDate);
 };
 
-const create = async (loan, arrayId, email) => {
+const create = async (loan, user, bookId) => {
+  const arrayId = [user, bookId];
+  const email = user.email;
+  const numberOfUserLoans = await LoanRepository.getNumberOfUserLoans(user.id);
+  if (numberOfUserLoans >= 3) {
+    throw new Error("You can not borrow more than 3 books");
+  }
   const newLoan = await LoanRepository.create(loan, arrayId);
   const message = messages.newLoanMessage(newLoan, email);
   transporter.sendMail(message, (error, info) => {

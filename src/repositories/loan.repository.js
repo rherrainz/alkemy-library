@@ -52,6 +52,15 @@ const getByDueDate = async (dueDate) => {
   // console.log(result[0]["user.email"]);
 };
 
+const getActiveLoansByUserId = async (userId) => {
+  const activeLoans = await db.Loan.findAll({
+    where: { userId: userId, isReturned: false },
+  });
+  const nuberOfActiveLoans = activeLoans.length;
+  return nuberOfActiveLoans;
+};
+
+
 const create = async (loan, arrayId) => {
   //TODO: PRIMERO SE DEBE VERIFICAR QUE EXISTA EL LIBRO Y EL USUARIO
   const book = await db.Book.findByPk(arrayId.bookId);
@@ -92,6 +101,7 @@ export const LoanRepository = {
   getByUserId,
   getByBookId,
   getByDueDate,
+  getActiveLoansByUserId,
   create,
   update,
 };
