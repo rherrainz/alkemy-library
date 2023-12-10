@@ -44,6 +44,7 @@ const user = (sequelize) => {
   User.associate = (models) => {
     User.hasMany(models.Loan);
     User.hasMany(models.Review);
+    User.belongsToMany(models.Event, { through: "event_user" });
   };
   return User;
 };
