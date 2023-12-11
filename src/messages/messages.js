@@ -77,10 +77,28 @@ const newBookMessage = (book) => {
   }
 };
 
+const newEventMessage = (event) => {
+  const allUsersEmails = UserService.getUsersEmails();
+  for (let i = 0; i < allUsersEmails.length; i++) {
+    const message = {
+      from: "Alkemy Library",
+      to: allUsersEmails[i],
+      subject: "New event registered",
+      html: `<h1>New event registered!</h1>
+            <p>The event ${event.eventName} has been registered successfully!</p>
+            <p>Enjoy our library!</p>`,
+    };
+    return message;
+  }
+};
+
+
+
 export const messages = {
   dueLoansMessage,
   newLoanMessage,
   newUserMessage,
   newAuthorMessage,
   newBookMessage,
+  newEventMessage
 };
