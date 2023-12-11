@@ -38,6 +38,22 @@ const create = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    const userIdFromToken = req.user.id;
+    const requestedUserId = req.params.id;
+
+    // Check if the user is trying to update their own data
+    if (userIdFromToken !== requestedUserId) {
+      return next(new ApiError("Unauthorized access, you can only update your own data", 403));
+    }
+
+    const result = await UserService.update(requestedUserId, req.body);
+    res.status(HTTP_STATUSES.ACCEPTED).json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+};
 const deleteById = async (req, res, next) => {
   try {
     const result = await UserService.deleteById(req.params.id);
@@ -52,5 +68,6 @@ export const UserController = {
   getByParams,
   getById,
   create,
+  update,
   deleteById,
 };

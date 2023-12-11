@@ -14,5 +14,11 @@ router.get("/params", isAuthenticated, UserController.getByParams);
 router.post("/", UserController.create);
 router.get("/:id", isAdmin, UserController.getById);
 router.delete("/:id", isSupAdmin, UserController.deleteById);
+router.patch(
+  "/:id",
+  isAuthenticated,
+  /*UserMiddleware.validateUpdate,*/
+  UserController.update
+);
 
 export default router;

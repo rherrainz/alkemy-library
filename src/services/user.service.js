@@ -53,6 +53,8 @@ const create = async (user) => {
 };
 
 const update = async (id, user) => {
+  const hashedPassword = await hashPassword(user.password); //Agregué esto porque si no al editarq quedaba el password sin hashear
+  user.password = hashedPassword;
   return await UserRepository.update(id, user);
 };
 
