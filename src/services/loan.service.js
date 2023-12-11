@@ -37,13 +37,14 @@ const getOldDueLoans = async () => {
 };
 
 const create = async (loan, user, bookId) => {
-  const arrayId = [user, bookId];
   const email = user.email;
-  const numberOfUserLoans = await LoanRepository.getNumberOfUserLoans(user.id);
+  const numberOfUserLoans = await LoanRepository.getActiveLoansByUserId(
+    user.id
+  );
   if (numberOfUserLoans >= 3) {
     throw new ApiError("You can not borrow more than 3 books");
   }
-  const newLoan = await LoanRepository.create(loan, arrayId);
+  const newLoan = await LoanRepository.create(loan, user, bookId);
   const message = messages.newLoanMessage(newLoan, email);
   transporter.sendMail(message, (error, info) => {
     if (error) {

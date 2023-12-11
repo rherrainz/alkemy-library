@@ -47,12 +47,12 @@ const newUserMessage = (user) => {
   return message;
 };
 
-const newAuthorMessage = (author) => {
-  const allUsersEmails = UserService.getUsersEmails();
+const newAuthorMessage = async (author) => {
+  const allUsersEmails = await UserService.getUsersEmails();
   for (let i = 0; i < allUsersEmails.length; i++) {
     const message = {
       from: "Alkemy Library",
-      to: allUsersEmails[i],
+      to: allUsersEmails[i].dataValues.email,
       subject: "New author registered",
       html: `<h1>New author registered!</h1>
             <p>The author ${author.firstName} ${author.lastName} has been registered successfully!</p>
@@ -62,12 +62,12 @@ const newAuthorMessage = (author) => {
   }
 };
 
-const newBookMessage = (book) => {
-  const allUsersEmails = UserService.getUsersEmails();
+const newBookMessage = async (book) => {
+  const allUsersEmails = await UserService.getUsersEmails();
   for (let i = 0; i < allUsersEmails.length; i++) {
     const message = {
       from: "Alkemy Library",
-      to: allUsersEmails[i],
+      to: allUsersEmails[i].dataValues.email,
       subject: "New book registered",
       html: `<h1>New book registered!</h1>
             <p>The book ${book.title} has been registered successfully!</p>
@@ -77,12 +77,12 @@ const newBookMessage = (book) => {
   }
 };
 
-const newEventMessage = (event) => {
-  const allUsersEmails = UserService.getUsersEmails();
+const newEventMessage = async (event) => {
+  const allUsersEmails = await UserService.getUsersEmails();
   for (let i = 0; i < allUsersEmails.length; i++) {
     const message = {
       from: "Alkemy Library",
-      to: allUsersEmails[i],
+      to: allUsersEmails[i].dataValues.email,
       subject: "New event registered",
       html: `<h1>New event registered!</h1>
             <p>The event ${event.eventName} has been registered successfully!</p>
@@ -92,13 +92,11 @@ const newEventMessage = (event) => {
   }
 };
 
-
-
 export const messages = {
   dueLoansMessage,
   newLoanMessage,
   newUserMessage,
   newAuthorMessage,
   newBookMessage,
-  newEventMessage
+  newEventMessage,
 };

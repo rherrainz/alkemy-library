@@ -75,9 +75,9 @@ const getActiveLoansByUserId = async (userId) => {
   return nuberOfActiveLoans;
 };
 
-const create = async (loan, arrayId) => {
+const create = async (loan, user, bookId) => {
   //TODO: PRIMERO SE DEBE VERIFICAR QUE EXISTA EL LIBRO Y EL USUARIO
-  const book = await db.Book.findByPk(arrayId.bookId);
+  const book = await db.Book.findByPk(bookId);
 
   if (!book) {
     throw new ApiError("Book not found", 404);
@@ -88,7 +88,7 @@ const create = async (loan, arrayId) => {
     throw new ApiError("Book is already loaned", 400); //VER ESTO
   }
 
-  loan.userId = arrayId.user.id;
+  loan.userId = user.id;
 
   //TODO: SE CREA EL PRÉSTAMO
   const loanCreated = await db.Loan.create(loan);
