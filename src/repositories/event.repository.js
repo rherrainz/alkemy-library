@@ -15,6 +15,35 @@ const getAll = async () => {
   });
 };
 
-export const EventRepository = {
+const update = async (id, event) => {
+    return await db.Event.update(
+      {
+        eventName: event.eventName,
+        date: event.date,
+        location: event.location,
+        description: event.description,
+        maxCapacity: event.maxCapacity,
+      },
+      { where: { id: id } }
+    );
+  };
+
+const create = async (event) => {
+    return await db.Event.create(event);
+  };
+
+  const remove = async (id) => {
+    return db.Event.update(
+      {
+        isActive: false,
+      },
+      { where: { id: id } }
+    );
+  };
+
+  export const EventRepository = {
   getAll,
+  create,
+  update,
+  remove
 };

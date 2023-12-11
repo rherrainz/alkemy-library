@@ -10,6 +10,14 @@ import {
 const router = express.Router();
 
 router.get("/all", isAuthenticated, EventController.getAll);
+router.post("/", isAdmin, /*EventMiddleware.validateCreate,*/ EventController.create);
+router.patch(
+    "/edit/:id",
+    isAdmin,
+    /*EventMiddleware.validateUpdate,*/
+    EventController.update
+  );
+  router.patch("/remove/:id", isAdmin, EventController.remove);
 
 
 export default router;
