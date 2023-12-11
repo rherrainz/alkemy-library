@@ -39,7 +39,9 @@ const oldDues = () => {
   });
 };
 
-export default CronTask ={
+const CronTask = {
   dailyDues,
-  oldDues
+  oldDues,
 };
+
+export { CronTask };
