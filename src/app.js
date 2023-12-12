@@ -7,6 +7,7 @@ import ApiError from "./errors/api.error.js";
 import exphbs from "express-handlebars";
 import { CronTask } from "./utils/cron.util.js";
 import backupTask from "./tasks/backup.task.js";
+import compression from "compression";
 
 import http from "http";
 import { Server } from "socket.io";
@@ -18,6 +19,9 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 app.set("io", io);
+
+//middleware de compresión de rutas
+app.use(compression());
 
 // Configuración de handlebars
 const hbs = exphbs.create({});
