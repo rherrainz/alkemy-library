@@ -8,6 +8,9 @@ import exphbs from "express-handlebars";
 import {CronTask} from "./utils/cron.util.js";
 import backupTask from "./tasks/backup.task.js"
 import compression from "compression";
+import helmet from "helmet";
+import xss from "xss-clean";
+import csurf from "csurf";
 
 import http from "http";
 import { Server } from "socket.io";
@@ -22,6 +25,17 @@ app.set("io", io);
 
 //middleware de compresión de rutas
 app.use(compression());
+
+//middleware de seguridad - configura encabezados HTTP seguros
+app.use(helmet());
+
+//middleware de seguridad - Limpia la entrada de los usuarios
+app.use(xss())
+
+//middleware de seguridad - Protege contra ataques CSRF
+const csrfProtection = csurf({ cookie: true });
+app.use(csrfProtection);
+
 
 // Configuración de handlebars
 const hbs = exphbs.create({});
