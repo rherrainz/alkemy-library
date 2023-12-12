@@ -5,8 +5,8 @@ import { db } from "./db/index.db.js";
 import indexRouter from "./routes/index.route.js";
 import ApiError from "./errors/api.error.js";
 import exphbs from "express-handlebars";
-import {CronTask} from "./utils/cron.util.js";
-import backupTask from "./tasks/backup.task.js"
+import { CronTask } from "./utils/cron.util.js";
+import backupTask from "./tasks/backup.task.js";
 
 import http from "http";
 import { Server } from "socket.io";
@@ -27,7 +27,7 @@ app.set("view engine", "handlebars");
 try {
   await db.sequelize.authenticate();
   console.log("Connection has been established successfully.");
-  db.sequelize.sync({ force: false }).then(() => {
+  db.sequelize.sync({ force: false, alter: false }).then(() => {
     console.log("Drop and re-sync db.");
   });
 } catch (error) {
