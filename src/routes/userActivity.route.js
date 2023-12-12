@@ -8,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.get('/loans/:id', isAdmin, UserController.getLoansByUserId);
-router.get('/events/:id', isAdmin, UserController.getEventsByUserId);
+router.get('/loans/:id', isAdmin, UserActivityController.getLoansByUserId);
+router.get('/events/:id', isAdmin, UserActivityController.getEventsByUserId);
 
 export default router;
