@@ -28,6 +28,18 @@ const update = async (id, event) => {
     );
   };
 
+const getByUserId = async (userId) => {
+  return await db.Event.findAll({
+    include: [
+      {
+        model: db.User,
+        through: { attributes: ["userId"] },
+        where: { id: userId },
+      },
+    ],
+  });
+}
+
 const create = async (event) => {
     return await db.Event.create(event);
   };
@@ -43,6 +55,7 @@ const create = async (event) => {
 
   export const EventRepository = {
   getAll,
+  getByUserId,
   create,
   update,
   remove
