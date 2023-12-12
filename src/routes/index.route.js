@@ -11,6 +11,7 @@ import genreRouter from "./genre.route.js";
 import languageRouter from "./language.route.js";
 import chatRouter from "./chat.route.js";
 import eventRouter from "./event.route.js";
+import userActivityRouter from "./userActivity.route.js";
 
 router.use("/user", userRouter);
 router.use("/login", authenticationRouter);
@@ -22,5 +23,6 @@ router.use("/language", languageRouter);
 router.use("/review", reviewRouter);
 router.use("/chat", chatRouter);
 router.use("/event", eventRouter);
+router.use("/userActivity", userActivityRouter);
 
 export default router;
