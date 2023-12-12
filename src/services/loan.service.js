@@ -103,6 +103,7 @@ export const LoanService = {
   getByAuthorId,
   getByBookId,
   getByLanguageId,
+  getByUserId,
   getByGenreId,
   getByDueDate,
   getOldDueLoans,
