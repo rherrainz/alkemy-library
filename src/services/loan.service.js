@@ -33,6 +33,10 @@ const getByDueDate = async (dueDate) => {
   return await LoanRepository.getByDueDate(dueDate);
 };
 
+const getByUserId = async (userId) => {
+  return await LoanRepository.getByUserId(userId);
+};
+
 const getOldDueLoans = async () => {
   return await LoanRepository.getOldDueLoans();
 };
