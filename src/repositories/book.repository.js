@@ -111,7 +111,23 @@ const getOnlyLoan = async () => {
 };
 
 const getById = async (id) => {
-  return await db.Book.findByPk(id);
+  return await db.Book.findByPk(id, {
+    include: [
+      {
+        model: db.Author,
+        through: { attributes: ["authorId"] },
+      },
+      {
+        model: db.Genre,
+        through: { attributes: ["genreId"] },
+      },
+      {
+        model: db.Language,
+        through: { attributes: ["languageId"] },
+      },
+    ],
+    raw: true,
+  });
 };
 
 const getByAuthorId = async (authorId) => {
@@ -159,6 +175,7 @@ const getByGenreId = async (genreId) => {
     ],
     where: {
       "$Genres.id$": genreId,
+      isLoaned: false,
     },
   });
 };
@@ -232,6 +249,21 @@ const returnBook = async (id) => {
   }
 };
 
+const bookLoaned = async (id) => {
+  try {
+    const book = await db.Book.findByPk(id);
+
+    await book.update({
+      isLoaned: true,
+    });
+
+    const { title, edition } = book.toJSON();
+    return { title, edition };
+  } catch (error) {
+    throw error;
+  }
+};
+
 const remove = async (id) => {
   return db.Book.update(
     {
@@ -239,6 +271,44 @@ const remove = async (id) => {
     },
     { where: { id: id } }
   );
+};
+
+const getByLastAuthor = async (authorId) => {
+  return await db.Book.findAll({
+    include: {
+      model: db.Author,
+      as: "authors",
+      through: { attributes: [] },
+      attributes: ["id", "firstName", "lastName"],
+      where: {
+        id: authorId,
+      },
+    },
+    where: {
+      isLoaned: false,
+      isActive: true,
+    },
+    limit: 5,
+  });
+};
+
+const getByLastGenre = async (genreId) => {
+  return await db.Book.findAll({
+    include: {
+      model: db.Genre,
+      as: "genres",
+      through: { attributes: [] },
+      attributes: ["id", "genre"],
+      where: {
+        id: genreId,
+      },
+    },
+    where: {
+      isLoaned: false,
+      isActive: true,
+    },
+    limit: 5,
+  });
 };
 
 export const BookRepository = {
@@ -254,5 +324,8 @@ export const BookRepository = {
   create,
   update,
   returnBook,
+  bookLoaned,
   remove,
+  getByLastGenre,
+  getByLastAuthor,
 };

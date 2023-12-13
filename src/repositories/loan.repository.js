@@ -1,6 +1,7 @@
 /*TODO: IMPORTACIÓN DE INDEX.DB */
 import { db } from "./../db/index.db.js";
 import ApiError from "../errors/api.error.js";
+import { BookRepository } from "./book.repository.js";
 
 //ACCIÓN CON PRIVILEGIOS
 const getAll = async () => {
@@ -48,8 +49,6 @@ const getByDueDate = async (dueDate) => {
     where: { dueDate: dueDate },
     raw: true,
   });
-
-  // console.log(result[0]["user.email"]);
 };
 
 const getOldDueLoans = async () => {
@@ -75,28 +74,8 @@ const getActiveLoansByUserId = async (userId) => {
   return nuberOfActiveLoans;
 };
 
-const create = async (loan, user, bookId) => {
-  //TODO: PRIMERO SE DEBE VERIFICAR QUE EXISTA EL LIBRO Y EL USUARIO
-  const book = await db.Book.findByPk(bookId);
-
-  if (!book) {
-    throw new ApiError("Book not found", 404);
-  }
-
-  // Check if the book is already loaned
-  if (book.isLoaned) {
-    throw new ApiError("Book is already loaned", 400); //VER ESTO
-  }
-
-  loan.userId = user.id;
-
-  //TODO: SE CREA EL PRÉSTAMO
-  const loanCreated = await db.Loan.create(loan);
-
-  // Set isLoaned to true for the book
-  await book.update({ isLoaned: true });
-
-  return loanCreated;
+const create = async (loan) => {
+  return await db.Loan.create(loan);
 };
 
 const update = async (id, loan) => {

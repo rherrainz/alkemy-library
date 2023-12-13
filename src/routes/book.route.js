@@ -15,7 +15,6 @@ router.get("/params", isAuthenticated, BookController.getByParams);
 router.get("/loan", isAdmin, BookController.getOnlyLoan);
 router.get("/:id", isAuthenticated, BookController.getById);
 router.get("/author/:id", isAuthenticated, BookController.getByAuthorId);
-router.get("/genre/:id", isAuthenticated, BookController.getByGenreId);
 router.get("/author-title", isAuthenticated, BookController.getByAuthorOrTitle);
 router.delete("/:id", isAdmin, BookController.remove);
 router.post("/", isAdmin, BookMiddleware.validateCreate, BookController.create);
@@ -27,6 +26,16 @@ router.patch(
 );
 router.patch("/return/:id", isAdmin, (req, res, next) =>
   BookController.returnBook(req, res, next, req.app.get("io"))
+);
+router.get(
+  "/recommendations/last-genre",
+  isAuthenticated,
+  BookController.getByLastGenre
+);
+router.get(
+  "/recommendations/last-author",
+  isAuthenticated,
+  BookController.getByLastAuthor
 );
 
 export default router;

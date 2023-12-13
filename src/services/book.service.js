@@ -1,6 +1,7 @@
 import { BookRepository } from "../repositories/book.repository.js";
 import { messages } from "../messages/messages.js";
 import { transporter } from "../messages/nodemailer.js";
+import { UserRepository } from "../repositories/user.repository.js";
 
 const getAll = async () => {
   return await BookRepository.getAll();
@@ -85,6 +86,16 @@ const remove = async (id) => {
   return await BookRepository.remove(id);
 };
 
+const getByLastGenre = async (userId) => {
+  const user = await UserRepository.getById(userId);
+  return await BookRepository.getByLastGenre(user.lastGenre);
+};
+
+const getByLastAuthor = async (userId) => {
+  const user = await UserRepository.getById(userId);
+  return await BookRepository.getByLastAuthor(user.lastAuthor);
+};
+
 export const BookService = {
   getAll,
   getAllActive,
@@ -99,4 +110,6 @@ export const BookService = {
   update,
   returnBook,
   remove,
+  getByLastGenre,
+  getByLastAuthor,
 };

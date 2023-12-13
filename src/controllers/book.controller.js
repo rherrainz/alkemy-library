@@ -122,6 +122,26 @@ const remove = async (req, res, next) => {
   }
 };
 
+const getByLastGenre = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const result = await BookService.getByLastGenre(userId);
+    res.status(HTTP_STATUSES.ACCEPTED).json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getByLastAuthor = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const result = await BookService.getByLastAuthor(userId);
+    res.status(HTTP_STATUSES.ACCEPTED).json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const BookController = {
   getAll,
   getAllActive,
@@ -135,4 +155,6 @@ export const BookController = {
   create,
   update,
   returnBook,
+  getByLastGenre,
+  getByLastAuthor,
 };

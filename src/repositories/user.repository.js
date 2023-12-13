@@ -7,34 +7,33 @@ const getAll = async (options) => {
 };
 
 //MÉTODO QUE RETORNA LOS USUARIOS QUE COINCIDAN CON LOS PARÁMETROS ENVIADOS EN LA QUERY
-const getByParams = async ({email, name, surname}) => {
-
+const getByParams = async ({ email, name, surname }) => {
   const whereClause = {};
 
-  if(email){
+  if (email) {
     whereClause.email = email;
   }
 
-  if(name){
+  if (name) {
     whereClause.firstName = name;
   }
 
-  if(surname){
+  if (surname) {
     whereClause.lastName = surname;
   }
 
   return await db.User.findAll({
-    where: whereClause
+    where: whereClause,
   });
-}
+};
 
 const getById = async (id) => {
   return await db.User.findByPk(id);
 };
 
-const getUsersEmails =  async () => {
+const getUsersEmails = async () => {
   const allUsersEmails = await db.User.findAll({
-    attributes: ['email']
+    attributes: ["email"],
   });
   return allUsersEmails;
 };
@@ -53,7 +52,7 @@ const update = async (id, user) => {
       roleId: user.roleId,
       isActive: user.isActive,
     },
-    { where: { id: id } },
+    { where: { id: id } }
   );
 };
 
@@ -62,12 +61,26 @@ const remove = async (id) => {
     {
       isActive: false,
     },
-    { where: { id: id } },
+    { where: { id: id } }
   );
 };
 
 const getUserByEmail = async (email) => {
   return await db.User.findOne({ where: { email } });
+};
+
+const updateLastInfo = async (userId, authorId, genreId) => {
+  return await db.User.update(
+    {
+      lastAuthor: authorId,
+      lastGenre: genreId,
+    },
+    {
+      where: {
+        id: userId,
+      },
+    }
+  );
 };
 
 export const UserRepository = {
@@ -79,4 +92,5 @@ export const UserRepository = {
   update,
   remove,
   getUserByEmail,
+  updateLastInfo,
 };
