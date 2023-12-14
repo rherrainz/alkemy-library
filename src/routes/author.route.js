@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import { AuthorController } from "./../controllers/author.controller.js";
+import { AuthorService } from "../services/author.service.js";
 import {
   isAdmin,
   isAuthenticated,
@@ -13,9 +14,8 @@ router.get("/:id", isAuthenticated, AuthorController.getByAuthorId);
 router.post(
   "/",
   isAdmin,
-  AuthorMiddleware.validateCreate,
-  AuthorController.create
-);
+  AuthorMiddleware.validateCreate, (req,res,next) => {
+  AuthorController.create(req,res,next,AuthorService.create)});
 router.put(
   "/:id",
   isAdmin,
