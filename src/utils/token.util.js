@@ -1,4 +1,6 @@
 import JWT from "jsonwebtoken";
+import 'dotenv/config'
+
 const SIGNATURE = process.env.JWT_SECRETKEY;
 
 export const encode = async (payload) => {

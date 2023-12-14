@@ -26,10 +26,9 @@ describe('Loan Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().resolves(data);
-        const loanService = { create: mockCreate };
 
         // Ejecuta la función add del controlador
-        await LoanController.create(mockRequest, mockResponse, mockNext, loanService);
+        await LoanController.create(mockRequest, mockResponse, mockNext, mockCreate);
 
         // Verifica que la respuesta sea correcta
         mockResponse.status.calledWith(201);
@@ -61,9 +60,8 @@ describe('Loan Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().rejects(new Error('Error. No se ha podido crear el préstamo'));
-        const loanService = { create: mockCreate };
 
-        await LoanController.create(mockRequest, mockResponse, mockNext, loanService);
+        await LoanController.create(mockRequest, mockResponse, mockNext, mockCreate);
 
         sinon.assert.calledWith(mockNext, sinon.match.instanceOf(Error).and(sinon.match.has('message', 'Error. No se ha podido crear el préstamo')))
     })

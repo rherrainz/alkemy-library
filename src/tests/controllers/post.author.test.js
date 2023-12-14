@@ -28,10 +28,9 @@ describe('Author Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().resolves(data);
-        const authorService = { create: mockCreate };
 
         // Ejecuta la función add del controlador
-        await AuthorController.create(mockRequest, mockResponse, mockNext, authorService);
+        await AuthorController.create(mockRequest, mockResponse, mockNext, mockCreate);
 
         // Verifica que la respuesta sea correcta
         mockResponse.status.calledWith(201);
@@ -53,7 +52,7 @@ describe('Author Controller - add function', () => {
     });
 
     //ERROR
-    it('Error al crear el Préstamo', async() => {
+    it('Error al crear el Autor', async() => {
         const mockRequest = { body: data };
         const mockResponse = {
             status: sinon.stub().returnsThis(),
@@ -63,9 +62,8 @@ describe('Author Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().rejects(new Error('Error. No se ha podido crear el préstamo'));
-        const authorService = { create: mockCreate };
 
-        await AuthorController.create(mockRequest, mockResponse, mockNext, authorService);
+        await AuthorController.create(mockRequest, mockResponse, mockNext, mockCreate);
 
         sinon.assert.calledWith(mockNext, sinon.match.instanceOf(Error).and(sinon.match.has('message', 'Error. No se ha podido crear el préstamo')))
     })

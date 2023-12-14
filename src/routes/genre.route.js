@@ -1,7 +1,6 @@
 import express from "express";
 import { GenreController } from "../controllers/genre.controller.js";
 import { GenreService } from "../services/genre.service.js";
-import { GenreService } from "../services/genre.service.js";
 import {
   isAdmin,
   isAuthenticated,
@@ -12,8 +11,7 @@ const router = express.Router();
 
 router.get("/", isAuthenticated, GenreController.getAll);
 router.get("/:id", isAdmin, GenreController.getById);
-router.post("/", isAdmin, GenreMiddleware.validateCreate, (req,res, next) => { (req,res, next) => { GenreController.add(req, res, next, GenreService.create)}(req, res, next, GenreService.create)});
-
+router.post("/", isAdmin, GenreMiddleware.validateCreate, (req,res, next) => { GenreController.add(req, res, next, GenreService.create)});
 router.get("/export-csv/all", isAuthenticated, GenreController.exportToCSV);
 router.get("/export-csv/download/:filename", GenreController.downloadCSV);
 
