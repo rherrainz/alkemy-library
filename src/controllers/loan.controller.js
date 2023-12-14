@@ -1,7 +1,5 @@
 import { HTTP_STATUSES } from "../constants/http.js";
 import { LoanService } from "../services/loan.service.js";
-import ApiError from "../errors/api.error.js";
-import { info } from "../log/logger.log.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -30,16 +28,15 @@ const getByDueDate = async (req, res, next) => {
   }
 };
 
-const create = async (req, res, next) => {
+const create = async (req, res, next, loanService) => {
   try {
     const user = req.user;
     const { bookId } = req.body;
-    const result = await LoanService.create(
+    const result = await loanService.create(
       req.body,
       user, 
       bookId
     );
-    info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
     next(error);
