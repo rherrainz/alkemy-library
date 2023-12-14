@@ -3,6 +3,8 @@ import { transporter } from "../messages/nodemailer.js";
 import { messages } from "../messages/messages.js";
 import book from "../db/models/book.model.js";
 import ApiError from "../errors/api.error.js";
+import { info } from "../log/logger.log.js";
+
 
 const getAll = async () => {
   return await LoanRepository.getAll();
@@ -53,6 +55,10 @@ const create = async (loan, user, bookId) => {
       console.log("Email sent: " + info.response);
     }
   });
+
+  //SE ACTUALIZA EL LOG
+  info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
+
   return newLoan;
 };
 
