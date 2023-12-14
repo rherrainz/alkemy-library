@@ -2,6 +2,8 @@ import { LoanRepository } from "../repositories/loan.repository.js";
 import { transporter } from "../messages/nodemailer.js";
 import { messages } from "../messages/messages.js";
 import ApiError from "../errors/api.error.js";
+import { info } from "../log/logger.log.js";
+
 import { UserRepository } from "../repositories/user.repository.js";
 import { BookRepository } from "../repositories/book.repository.js";
 import generateCSV from "../utils/csv.util.js";
@@ -83,6 +85,10 @@ const create = async (loan, user, bookId) => {
         console.log("Email sent: " + info.response);
       }
     });
+
+  //SE ACTUALIZA EL LOG
+  info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
+
 
     return loanCreated;
   } catch (error) {

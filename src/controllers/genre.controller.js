@@ -1,6 +1,5 @@
 import { HTTP_STATUSES } from "../constants/http.js";
 import { GenreService } from "../services/genre.service.js";
-import ApiError from "../errors/api.error.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -29,7 +28,7 @@ const remove = async (req, res, next) => {
   }
 };
 
-const add = async (req, res, next) => {
+const add = async (req, res, next, genreService) => {
   try {
     const result = await GenreService.create(req.body);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });

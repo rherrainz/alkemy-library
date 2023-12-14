@@ -1,6 +1,5 @@
 import { HTTP_STATUSES } from "../constants/http.js";
 import { BookService } from "../services/book.service.js";
-import ApiError from "../errors/api.error.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -81,10 +80,10 @@ const getByAuthorOrTitle = async (req, res, next) => {
   }
 };
 
-const create = async (req, res, next) => {
+const create = async (req, res, next, bookService) => {
   try {
     const { authorId, genreId, languageId } = req.body;
-    const result = await BookService.create(req.body, {
+    const result = await bookService.create(req.body, {
       authorId,
       genreId,
       languageId,

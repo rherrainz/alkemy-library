@@ -20,9 +20,9 @@ const getByAuthorId = async (req, res, next) => {
   }
 };
 
-const create = async (req, res, next) => {
+const create = async (req, res, next, authorService) => {
   try {
-    const result = await AuthorService.create(req.body);
+    const result = await authorService.create(req.body);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
     next(error);

@@ -1,5 +1,6 @@
 import express from "express";
 import { LoanController } from "../controllers/loan.controller.js";
+import { LoanService } from "../services/loan.service.js";
 import {
   isAuthenticated,
   isAdmin,
@@ -16,8 +17,9 @@ router.post(
   "/",
   isAuthenticated,
   LoanMiddleware.validateCreate,
-  LoanController.create
-);
+  (req, res, next) => {
+  LoanController.create(req, res, next, LoanService.create)
+});
 router.patch(
   "/edit/:id",
   isAdmin,

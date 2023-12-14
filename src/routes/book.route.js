@@ -1,5 +1,6 @@
 import express from "express";
 import { BookController } from "./../controllers/book.controller.js";
+import { BookService } from "../services/book.service.js";
 import {
   isAuthenticated,
   isAdmin,
@@ -17,7 +18,7 @@ router.get("/:id", isAuthenticated, BookController.getById);
 router.get("/author/:id", isAuthenticated, BookController.getByAuthorId);
 router.get("/author-title", isAuthenticated, BookController.getByAuthorOrTitle);
 router.delete("/:id", isAdmin, BookController.remove);
-router.post("/", isAdmin, BookMiddleware.validateCreate, BookController.create);
+router.post("/", isAdmin, BookMiddleware.validateCreate, (req, res, next) => { BookController.create(req,res,next, BookService.create)});
 router.patch(
   "/:id",
   isAdmin,
