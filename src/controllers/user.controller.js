@@ -29,9 +29,9 @@ const getById = async (req, res, next) => {
   }
 };
 
-const create = async (req, res, next) => {
+const create = async (req, res, next, userService) => {
   try {
-    const result = await UserService.create(req.body);
+    const result = await userService.create(req.body);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
     
@@ -59,6 +59,7 @@ const update = async (req, res, next) => {
     next(error);
   }
 };
+
 const deleteById = async (req, res, next) => {
   try {
     const result = await UserService.deleteById(req.params.id);
