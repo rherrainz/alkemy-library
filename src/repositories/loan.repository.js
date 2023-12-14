@@ -4,7 +4,7 @@ import ApiError from "../errors/api.error.js";
 import { BookRepository } from "./book.repository.js";
 
 //ACCIÓN CON PRIVILEGIOS
-const getAll = async () => {
+const getAll = async (raw) => {
   return await db.Loan.findAll({
     include: [
       {
@@ -14,6 +14,7 @@ const getAll = async () => {
         model: db.Book,
       },
     ],
+    raw,
   });
 };
 

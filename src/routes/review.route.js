@@ -22,4 +22,7 @@ router.patch(
   ReviewController.update
 );
 
+router.get("/export-csv/all", isAuthenticated, ReviewController.exportToCSV);
+router.get("/export-csv/download/:filename", ReviewController.downloadCSV);
+
 export default router;

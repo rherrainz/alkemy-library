@@ -1,6 +1,7 @@
 import { AuthorRepository } from "../repositories/author.repository.js";
 import { messages } from "../messages/messages.js";
 import { transporter } from "../messages/nodemailer.js";
+import generateCSV from "../utils/csv.util.js";
 
 const getAll = async () => {
   return await AuthorRepository.getAll();
@@ -31,10 +32,17 @@ const remove = async (id) => {
   return await AuthorRepository.remove(id);
 };
 
+const exportToCSV = async () => {
+  const data = await AuthorRepository.getAll({ raw: true });
+  const fileName = await generateCSV(data);
+  return `/export-csv/download/${fileName}`;
+};
+
 export const AuthorService = {
   getAll,
   getByAuthorId,
   create,
   update,
   remove,
+  exportToCSV,
 };

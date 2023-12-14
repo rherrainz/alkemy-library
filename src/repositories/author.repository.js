@@ -2,8 +2,8 @@
 import { db } from "./../db/index.db.js";
 
 //ACCIÓN CON PRIVILEGIOS
-const getAll = async () => {
-  return await db.Author.findAll();
+const getAll = async (raw) => {
+  return await db.Author.findAll(raw);
 };
 
 const getByAuthorId = async (id) => {
@@ -22,7 +22,7 @@ const update = async (id, author) => {
       birthDate: author.birthDate,
       nationality: author.nationality,
     },
-    { where: { id: id } },
+    { where: { id: id } }
   );
 };
 
@@ -31,7 +31,7 @@ const remove = async (id) => {
     {
       isActive: false,
     },
-    { where: { id: id } },
+    { where: { id: id } }
   );
 };
 

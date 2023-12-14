@@ -39,4 +39,7 @@ router.get(
   BookController.getByLastAuthor
 );
 
+router.get("/export-csv/all", isAuthenticated, BookController.exportToCSV);
+router.get("/export-csv/download/:filename", BookController.downloadCSV);
+
 export default router;

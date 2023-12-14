@@ -16,4 +16,7 @@ router.post(
   LanguageController.add
 );
 
+router.get("/export-csv/all", isAuthenticated, LanguageController.exportToCSV);
+router.get("/export-csv/download/:filename", LanguageController.downloadCSV);
+
 export default router;

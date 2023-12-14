@@ -13,7 +13,7 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const result = await GenreService.getById(req.params.id);
-    res.status(200).json({ data: result });
+    res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
     next(error);
   }
@@ -28,10 +28,37 @@ const remove = async (req, res, next) => {
   }
 };
 
-const add = async (req, res, next, genreService) => {
+const add = async (req, res, next, genreService, genreService) => {
   try {
     const result = await genreService.create(req.body);
-    res.status(200).json({ data: result });
+    res.status(HTTP_STATUSES.CREATED).json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const exportToCSV = async (req, res, next) => {
+  try {
+    const result = await GenreService.exportToCSV();
+    res
+      .status(HTTP_STATUSES.OK)
+      .json({ msg: "CSV file exported successfully", result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const downloadCSV = async (req, res, next) => {
+  try {
+    const { filename } = req.params;
+    res.download(`src/exports/${filename}`, (err) => {
+      if (err) {
+        throw new ApiError(
+          "File has expired",
+          HTTP_STATUSES.INTERNAL_SERVER_ERROR
+        );
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -42,4 +69,6 @@ export const GenreController = {
   getById,
   add,
   remove,
+  exportToCSV,
+  downloadCSV,
 };

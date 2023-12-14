@@ -2,8 +2,8 @@
 import { db } from "./../db/index.db.js";
 
 //ACCIÓN CON PRIVILEGIOS
-const getAll = async () => {
-  return await db.Genre.findAll();
+const getAll = async (raw) => {
+  return await db.Genre.findAll(raw);
 };
 
 const getById = async (id) => {
@@ -20,7 +20,7 @@ const update = async (id, Genre) => {
       startDate: Genre.startDate,
       dueDate: Genre.dueDate,
     },
-    { where: { id: id } },
+    { where: { id: id } }
   );
 };
 
