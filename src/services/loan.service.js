@@ -1,10 +1,11 @@
 import { LoanRepository } from "../repositories/loan.repository.js";
 import { transporter } from "../messages/nodemailer.js";
 import { messages } from "../messages/messages.js";
-import book from "../db/models/book.model.js";
 import ApiError from "../errors/api.error.js";
 import { info } from "../log/logger.log.js";
 
+import { UserRepository } from "../repositories/user.repository.js";
+import { BookRepository } from "../repositories/book.repository.js";
 
 const getAll = async () => {
   return await LoanRepository.getAll();
@@ -34,32 +35,64 @@ const getByDueDate = async (dueDate) => {
   return await LoanRepository.getByDueDate(dueDate);
 };
 
+const getByUserId = async (userId) => {
+  return await LoanRepository.getByUserId(userId);
+};
+
 const getOldDueLoans = async () => {
   return await LoanRepository.getOldDueLoans();
 };
 
 const create = async (loan, user, bookId) => {
-  const email = user.email;
-  const numberOfUserLoans = await LoanRepository.getActiveLoansByUserId(
-    user.id
-  );
-  if (numberOfUserLoans >= 3) {
-    throw new ApiError("You can not borrow more than 3 books");
-  }
-  const newLoan = await LoanRepository.create(loan, user, bookId);
-  const message = messages.newLoanMessage(newLoan, email);
-  transporter.sendMail(message, (error, info) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
+  try {
+    const numberOfUserLoans = await LoanRepository.getActiveLoansByUserId(
+      user.id
+    );
+    if (numberOfUserLoans >= 3) {
+      throw new ApiError("You can not borrow more than 3 books", 401);
     }
-  });
+
+    const book = await BookRepository.getById(bookId);
+    if (!book) {
+      throw new ApiError("Book not found", 404);
+    }
+    if (book.isLoaned) {
+      throw new ApiError("Book is already loaned", 400);
+    }
+
+    loan.userId = user.id;
+    const { id: userId } = user;
+
+    const genreId = Array.isArray(book["genres.id"])
+      ? book["genres.id"][0]
+      : book["genres.id"];
+    const authorId = Array.isArray(book["authors.id"])
+      ? book["authors.id"][0]
+      : book["authors.id"];
+
+    const [updateUser, loanCreated, updateBook] = await Promise.all([
+      UserRepository.updateLastInfo(userId, authorId, genreId),
+      LoanRepository.create(loan),
+      BookRepository.bookLoaned(bookId),
+    ]);
+
+    const message = messages.newLoanMessage(loanCreated, user.email);
+    transporter.sendMail(message, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
 
   //SE ACTUALIZA EL LOG
   info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
 
-  return newLoan;
+
+    return loanCreated;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const update = async (id, arrayId) => {
@@ -76,6 +109,7 @@ export const LoanService = {
   getByAuthorId,
   getByBookId,
   getByLanguageId,
+  getByUserId,
   getByGenreId,
   getByDueDate,
   getOldDueLoans,

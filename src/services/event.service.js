@@ -6,6 +6,10 @@ const getAll = async () => {
   return await EventRepository.getAll();
 };
 
+const getByUserId = async (userId) => {
+    return await EventRepository.getByUserId(userId);
+  };
+
 /*const create = async (event) => {
     return await EventRepository.create(event);
   };*/
@@ -33,6 +37,7 @@ const getAll = async () => {
 
 export const EventService = {
   getAll,
+  getByUserId,
   create,
   update,
   remove

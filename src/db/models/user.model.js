@@ -38,6 +38,12 @@ const user = (sequelize) => {
         allowNull: false,
         defaultValue: ROLE.USER,
       },
+      lastAuthor: {
+        type: DataTypes.STRING,
+      },
+      lastGenre: {
+        type: DataTypes.STRING,
+      },
     },
     { timestamps: true }
   );
