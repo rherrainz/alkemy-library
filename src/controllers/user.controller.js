@@ -31,7 +31,7 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next, userService) => {
   try {
-    const result = await userService.create(req.body);
+    const result = await userService(req.body);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
     

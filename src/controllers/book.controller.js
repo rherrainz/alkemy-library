@@ -83,7 +83,7 @@ const getByAuthorOrTitle = async (req, res, next) => {
 const create = async (req, res, next, bookService) => {
   try {
     const { authorId, genreId, languageId } = req.body;
-    const result = await bookService.create(req.body, {
+    const result = await bookService(req.body, {
       authorId,
       genreId,
       languageId,

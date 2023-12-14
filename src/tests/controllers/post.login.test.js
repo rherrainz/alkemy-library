@@ -26,10 +26,9 @@ describe('Login Controller - login function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().resolves(data);
-        const authService = { authentication: mockCreate };
 
         // Ejecuta la función add del controlador
-        await authenticationController.login(mockRequest, mockResponse, mockNext, authService);
+        await authenticationController.login(mockRequest, mockResponse, mockNext, mockCreate);
 
         // Verifica que la respuesta sea correcta
         mockResponse.status.calledWith(200);
@@ -53,9 +52,8 @@ describe('Login Controller - login function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().rejects(new Error('Error. No se ha podido logearse en el sistema'));
-        const authService = { authentication: mockCreate };
 
-        await authenticationController.login(mockRequest, mockResponse, mockNext, authService);
+        await authenticationController.login(mockRequest, mockResponse, mockNext, mockCreate);
 
         sinon.assert.calledWith(mockNext, sinon.match.instanceOf(Error).and(sinon.match.has('message', 'Error. No se ha podido logearse en el sistema')))
     })

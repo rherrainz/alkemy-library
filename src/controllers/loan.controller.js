@@ -32,7 +32,11 @@ const create = async (req, res, next, loanService) => {
   try {
     const user = req.user;
     const { bookId } = req.body;
-    const result = await loanService.create(req.body, user, bookId);
+    const result = await loanService(
+      req.body,
+      user, 
+      bookId
+    );
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
     next(error);

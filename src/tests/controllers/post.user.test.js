@@ -28,10 +28,9 @@ describe('User Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().resolves(data);
-        const userService = { create: mockCreate };
 
         // Ejecuta la función add del controlador
-        await UserController.create(mockRequest, mockResponse, mockNext, userService);
+        await UserController.create(mockRequest, mockResponse, mockNext, mockCreate);
 
         // Verifica que la respuesta sea correcta
         mockResponse.status.calledWith(201);
@@ -64,9 +63,8 @@ describe('User Controller - add function', () => {
 
         // Mock del servicio para simular un error de correo electrónico repetido
         const mockCreate = sinon.stub().rejects({ name: 'SequelizeUniqueConstraintError' });
-        const userService = { create: mockCreate };
 
-        await UserController.create(mockRequest, mockResponse, mockNext, userService);
+        await UserController.create(mockRequest, mockResponse, mockNext, mockCreate);
 
         // Verifica que se llamó a status y json con los valores correctos
         sinon.assert.calledWith(mockResponse.status, 409); // Código del status enviado por el sv
@@ -87,9 +85,8 @@ describe('User Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().rejects(new Error('El correo electrónico ya se encuentra registrado'));
-        const userService = { create: mockCreate };
 
-        await UserController.create(mockRequest, mockResponse, mockNext, userService);
+        await UserController.create(mockRequest, mockResponse, mockNext, mockCreate);
 
         sinon.assert.calledWith(mockNext, sinon.match.instanceOf(Error).and(sinon.match.has('message', 'El correo electrónico ya se encuentra registrado')))
     })

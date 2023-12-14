@@ -29,10 +29,9 @@ describe('Book Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().resolves(data);
-        const bookService = { create: mockCreate };
 
         // Ejecuta la función add del controlador
-        await BookController.create(mockRequest, mockResponse, mockNext, bookService);
+        await BookController.create(mockRequest, mockResponse, mockNext, mockCreate);
 
         // Verifica que la respuesta sea correcta
         mockResponse.status.calledWith(200);
@@ -64,9 +63,8 @@ describe('Book Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().rejects(new Error('Error. No se ha guardado el libro'));
-        const bookService = { create: mockCreate };
 
-        await BookController.create(mockRequest, mockResponse, mockNext, bookService);
+        await BookController.create(mockRequest, mockResponse, mockNext, mockCreate);
 
         sinon.assert.calledWith(mockNext, sinon.match.instanceOf(Error).and(sinon.match.has('message', 'Error. No se ha guardado el libro')))
     })
