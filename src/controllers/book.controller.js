@@ -116,7 +116,7 @@ const returnBook = async (req, res, next, io) => {
 const remove = async (req, res, next) => {
   try {
     const result = await BookService.remove(req.params.id);
-    res.status(200).json({ data: result });
+    res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
     next(error);
   }
@@ -142,6 +142,33 @@ const getByLastAuthor = async (req, res, next) => {
   }
 };
 
+const exportToCSV = async (req, res, next) => {
+  try {
+    const result = await BookService.exportToCSV();
+    res
+      .status(HTTP_STATUSES.OK)
+      .json({ msg: "CSV file exported successfully", result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const downloadCSV = async (req, res, next) => {
+  try {
+    const { filename } = req.params;
+    res.download(`src/exports/${filename}`, (err) => {
+      if (err) {
+        throw new ApiError(
+          "File has expired",
+          HTTP_STATUSES.INTERNAL_SERVER_ERROR
+        );
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const BookController = {
   getAll,
   getAllActive,
@@ -157,4 +184,6 @@ export const BookController = {
   returnBook,
   getByLastGenre,
   getByLastAuthor,
+  exportToCSV,
+  downloadCSV,
 };

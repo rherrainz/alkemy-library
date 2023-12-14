@@ -34,11 +34,7 @@ const create = async (req, res, next) => {
   try {
     const user = req.user;
     const { bookId } = req.body;
-    const result = await LoanService.create(
-      req.body,
-      user, 
-      bookId
-    );
+    const result = await LoanService.create(req.body, user, bookId);
     info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
@@ -49,7 +45,7 @@ const create = async (req, res, next) => {
 const remove = async (req, res, next) => {
   try {
     const result = await LoanService.remove(req.params.id);
-    res.status(200).json({ data: result });
+    res.status(HTTP_STATUSES.OK).json({ data: result });
   } catch (error) {
     next(error);
   }
@@ -64,6 +60,33 @@ const edit = async (req, res, next) => {
   }
 };
 
+const exportToCSV = async (req, res, next) => {
+  try {
+    const result = await LoanService.exportToCSV();
+    res
+      .status(HTTP_STATUSES.OK)
+      .json({ msg: "CSV file exported successfully", result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const downloadCSV = async (req, res, next) => {
+  try {
+    const { filename } = req.params;
+    res.download(`src/exports/${filename}`, (err) => {
+      if (err) {
+        throw new ApiError(
+          "File has expired",
+          HTTP_STATUSES.INTERNAL_SERVER_ERROR
+        );
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const LoanController = {
   getAll,
   getById,
@@ -71,4 +94,6 @@ export const LoanController = {
   create,
   edit,
   remove,
+  exportToCSV,
+  downloadCSV,
 };

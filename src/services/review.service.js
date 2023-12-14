@@ -1,4 +1,5 @@
 import { ReviewRepository } from "../repositories/review.repository.js";
+import generateCSV from "../utils/csv.util.js";
 
 const getAll = async () => {
   return await ReviewRepository.getAll();
@@ -24,6 +25,12 @@ const update = async (id, review) => {
   return await ReviewRepository.update(id, review);
 };
 
+const exportToCSV = async () => {
+  const data = await ReviewRepository.getAll({ raw: true });
+  const fileName = await generateCSV(data);
+  return `/export-csv/download/${fileName}`;
+};
+
 export const ReviewService = {
   getAll,
   getById,
@@ -31,4 +38,5 @@ export const ReviewService = {
   getByBookId,
   create,
   update,
+  exportToCSV,
 };

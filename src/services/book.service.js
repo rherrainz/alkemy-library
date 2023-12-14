@@ -2,6 +2,7 @@ import { BookRepository } from "../repositories/book.repository.js";
 import { messages } from "../messages/messages.js";
 import { transporter } from "../messages/nodemailer.js";
 import { UserRepository } from "../repositories/user.repository.js";
+import generateCSV from "../utils/csv.util.js";
 
 const getAll = async () => {
   return await BookRepository.getAll();
@@ -96,6 +97,12 @@ const getByLastAuthor = async (userId) => {
   return await BookRepository.getByLastAuthor(user.lastAuthor);
 };
 
+const exportToCSV = async () => {
+  const data = await BookRepository.getAll({ raw: true });
+  const fileName = await generateCSV(data);
+  return `/export-csv/download/${fileName}`;
+};
+
 export const BookService = {
   getAll,
   getAllActive,
@@ -112,4 +119,5 @@ export const BookService = {
   remove,
   getByLastGenre,
   getByLastAuthor,
+  exportToCSV,
 };

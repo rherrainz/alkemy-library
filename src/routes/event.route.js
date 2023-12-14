@@ -10,14 +10,20 @@ import {
 const router = express.Router();
 
 router.get("/all", isAuthenticated, EventController.getAll);
-router.post("/", isAdmin, /*EventMiddleware.validateCreate,*/ EventController.create);
+router.post(
+  "/",
+  isAdmin,
+  /*EventMiddleware.validateCreate,*/ EventController.create
+);
 router.patch(
-    "/edit/:id",
-    isAdmin,
-    /*EventMiddleware.validateUpdate,*/
-    EventController.update
-  );
-  router.patch("/remove/:id", isAdmin, EventController.remove);
+  "/edit/:id",
+  isAdmin,
+  /*EventMiddleware.validateUpdate,*/
+  EventController.update
+);
+router.patch("/remove/:id", isAdmin, EventController.remove);
 
+router.get("/export-csv/all", isAuthenticated, EventController.exportToCSV);
+router.get("/export-csv/download/:filename", EventController.downloadCSV);
 
 export default router;

@@ -56,6 +56,33 @@ const update = async (req, res, next) => {
   }
 };
 
+const exportToCSV = async (req, res, next) => {
+  try {
+    const result = await ReviewService.exportToCSV();
+    res
+      .status(HTTP_STATUSES.OK)
+      .json({ msg: "CSV file exported successfully", result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const downloadCSV = async (req, res, next) => {
+  try {
+    const { filename } = req.params;
+    res.download(`src/exports/${filename}`, (err) => {
+      if (err) {
+        throw new ApiError(
+          "File has expired",
+          HTTP_STATUSES.INTERNAL_SERVER_ERROR
+        );
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const ReviewController = {
   getAll,
   getById,
@@ -63,4 +90,6 @@ export const ReviewController = {
   getByBookId,
   create,
   update,
+  exportToCSV,
+  downloadCSV,
 };

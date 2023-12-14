@@ -2,8 +2,8 @@
 import { db } from "./../db/index.db.js";
 
 //ACCIÓN CON PRIVILEGIOS
-const getAll = async () => {
-  return await db.Language.findAll();
+const getAll = async (raw) => {
+  return await db.Language.findAll(raw);
 };
 
 const create = async (language) => {
