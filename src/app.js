@@ -16,6 +16,7 @@ import http from "http";
 import { Server } from "socket.io";
 import { NotificationSettings } from "./realtime/notifiy.realtime.js";
 import { ChatSocket } from "./realtime/chat.realtime.js";
+import { error } from "./log/logger.log.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -30,12 +31,12 @@ app.use(compression());
 app.use(helmet());
 
 //middleware de seguridad - Limpia la entrada de los usuarios
-app.use(xss())
+app.use(xss());
 
 //middleware de seguridad - Protege contra ataques CSRF
 const csrfProtection = csurf({ cookie: true });
-app.use(csrfProtection);
-
+app.use(cookieParser());
+// app.use(csrfProtection);
 
 // Configuración de handlebars
 const hbs = exphbs.create({});
@@ -63,7 +64,6 @@ new NotificationSettings(io, notifyEvent);
 new ChatSocket(io);
 
 app.use(express.json());
-app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;

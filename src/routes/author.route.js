@@ -24,4 +24,7 @@ router.put(
 );
 router.delete("/:id", isAdmin, AuthorController.remove);
 
+router.get("/export-csv/all", isAuthenticated, AuthorController.exportToCSV);
+router.get("/export-csv/download/:filename", AuthorController.downloadCSV);
+
 export default router;

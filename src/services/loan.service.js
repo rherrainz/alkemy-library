@@ -6,6 +6,7 @@ import { info } from "../log/logger.log.js";
 
 import { UserRepository } from "../repositories/user.repository.js";
 import { BookRepository } from "../repositories/book.repository.js";
+import generateCSV from "../utils/csv.util.js";
 
 const getAll = async () => {
   return await LoanRepository.getAll();
@@ -103,6 +104,12 @@ const remove = async (id) => {
   return await LoanRepository.remove(id);
 };
 
+const exportToCSV = async () => {
+  const data = await LoanRepository.getAll({ raw: true });
+  const fileName = await generateCSV(data);
+  return `/export-csv/download/${fileName}`;
+};
+
 export const LoanService = {
   getAll,
   getById,
@@ -116,4 +123,5 @@ export const LoanService = {
   create,
   update,
   remove,
+  exportToCSV,
 };

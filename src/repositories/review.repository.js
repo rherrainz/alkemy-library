@@ -2,8 +2,8 @@
 import { db } from "./../db/index.db.js";
 
 //ACCIÓN CON PRIVILEGIOS
-const getAll = async () => {
-  return await db.Review.findAll();
+const getAll = async (raw) => {
+  return await db.Review.findAll(raw);
 };
 
 const getById = async (id) => {
@@ -33,7 +33,7 @@ const create = async (review, user) => {
   const avg = totalRating / reviews.length;
   const updateAvgScore = await db.Book.update(
     { avgScore: avg },
-    { where: { id: book.id } },
+    { where: { id: book.id } }
   );
   return reviewCreated;
 };
@@ -44,7 +44,7 @@ const update = async (id, review) => {
       reviewText: review.reviewText,
       rating: review.rating,
     },
-    { where: { id: id } },
+    { where: { id: id } }
   );
 };
 

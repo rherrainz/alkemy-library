@@ -4,22 +4,23 @@ import { db } from "./../db/index.db.js";
 import { Op } from "sequelize";
 
 //ACCIÓN CON PRIVILEGIOS
-const getAll = async () => {
+const getAll = async (raw) => {
   return await db.Book.findAll({
     include: [
       {
         model: db.Author, //TABLA RELACIONADA A LA QUERY
-        through: { attributes: ["authorId"] }, //COLUMNA DE LA TABLA INTERMEDIA
+        through: { attributes: [] }, //COLUMNA DE LA TABLA INTERMEDIA
       },
       {
         model: db.Genre,
-        through: { attributes: ["genreId"] },
+        through: { attributes: [] },
       },
       {
         model: db.Language,
-        through: { attributes: ["languageId"] },
+        through: { attributes: [] },
       },
     ],
+    raw,
   });
 };
 const getAllActive = async () => {
@@ -27,15 +28,15 @@ const getAllActive = async () => {
     include: [
       {
         model: db.Author,
-        through: { attributes: ["authorId"] },
+        through: { attributes: [] },
       },
       {
         model: db.Genre,
-        through: { attributes: ["genreId"] },
+        through: { attributes: [] },
       },
       {
         model: db.Language,
-        through: { attributes: ["languageId"] },
+        through: { attributes: [] },
       },
     ],
     where: {

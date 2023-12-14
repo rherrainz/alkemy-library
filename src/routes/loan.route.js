@@ -27,4 +27,7 @@ router.patch(
   LoanController.edit
 );
 
+router.get("/export-csv/all", isAdmin, LoanController.exportToCSV);
+router.get("/export-csv/download/:filename", LoanController.downloadCSV);
+
 export default router;
