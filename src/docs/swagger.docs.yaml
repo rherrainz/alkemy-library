@@ -8,7 +8,7 @@ info:
 
 servers:
   - description: Servidor Local
-    url: http://localhost:3000
+    url: http://localhost:3000/api
 
 tags:
   - name: auth
@@ -31,66 +31,11 @@ tags:
     description: ""
 
 paths:
-  /user:
-    get:
-      security:
-        - token: []
-      tags:
-        - user
-      #TODO: Rellenar los campos faltantes
-      summary: ""
-      description: ""
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: 0987ed9d-2ffd-4e5f-9da0-133952194751
-                    firstName:
-                      type: string
-                      example: Name
-                    lastName:
-                      type: string
-                      example: LastName
-                    email:
-                      type: string
-                      example: user@user.com
-                    password:
-                      type: string
-                      example: password
-                    role:
-                      type: string
-                      example: user
-                    isActive:
-                      type: boolean
-                      example: true
-                    lastAuthor: 
-                      type: string
-                      example: null,
-                    lastGenre: 
-                      type: string
-                      example: null,
-                    updatedAt: 
-                      type: string
-                      example: 2023-12-14T20:29:02.595Z
-                    createdAt: 
-                      type: string
-                      example: 2023-12-14T20:29:02.595Z
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-
-
+  # AUTHENTICATION
   /user/register:
     post:
       tags:
-        - user
+        - auth
       summary: Register a new user
       description: Enables a new user to sign up to the system by providing required details like firstName, lastName, email and password. Once registered, they can log in using their credentials.
       requestBody:
@@ -98,17 +43,51 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserRegistration"
+              $ref: "#/components/schemas/Register"
       responses:
         "201":
-          $ref: "#/components/responses/UserCreate"
+          $ref: "#/components/responses/Register"
+        "422":
+          $ref: "#/components/responses/BadRequest"
+  /login:
+    post:
+      tags:
+        - auth
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        "200":
+          $ref: "#/components/responses/Login"
+        "401":
+          $ref: "#/components/responses/InvalidCredentials"
         "422":
           $ref: "#/components/responses/BadRequest"
 
+  /user:
+    get:
+      security:
+        - token: []
+      tags:
+        - user
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
+      responses:
+        "200":
+          $ref: "#/components/responses/UserGetAll"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
 components:
   schemas:
-    UserRegistration:
+    Register:
       type: object
       properties:
         firstName:
@@ -123,9 +102,19 @@ components:
         password:
           type: string
           example: password
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@user.com
+        password:
+          type: string
+          example: password
 
   responses:
-    UserCreate:
+    # AUTH - 200
+    Register:
       description: Created
       content:
         application/json:
@@ -153,13 +142,80 @@ components:
               isActive:
                 type: boolean
                 example: true
-              updatedAt: 
+              updatedAt:
                 type: string
                 example: 2023-12-14T20:29:02.595Z
-              createdAt: 
+              createdAt:
                 type: string
                 example: 2023-12-14T20:29:02.595Z
+    Login:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlNGM5MWRjLWI0MzItNDFmYy05N2I0LWE0MzgyMGVjYTA4OSIsImZpcnN0TmFtZSI6Ik5vbWJyZSIsImxhc3ROYW1lIjoiQXBlbGxpZG8iLCJlbWFpbCI6ImVyZGluaS5keWxhbkBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRuSGdkQWZwZXVjTnhHcFgwTDZjZ1dPUjJYa0tibnVHbHd6LkZja1ZQMEx3ZlFKZFZRVFNmNiIsImlzQWN0aXZlIjp0cnVlLCJyb2xlIjoidXNlciIsImNyZWF0ZWRBdCI6IjIwMjMtMTItMDZUMjA6Mjk6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjMtMTItMDZUMjA6Mjk6MTcuMDAwWiIsImlhdCI6MTcwMjEzOTg0MX0.1Kk7IgeIdVnEZzrht4dkTgmH3m2alCoY84MKr7vy3tQ
+    # AUTH - ERROR
+    InvalidCredentials:
+      description: Unauthorized - This could be due to invalid credentials or having the account inactive.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Invalid credentials
 
+    # USER - 200
+    UserGetAll:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 0987ed9d-2ffd-4e5f-9da0-133952194751
+                firstName:
+                  type: string
+                  example: Name
+                lastName:
+                  type: string
+                  example: LastName
+                email:
+                  type: string
+                  example: user@user.com
+                password:
+                  type: string
+                  example: password
+                role:
+                  type: string
+                  example: user
+                isActive:
+                  type: boolean
+                  example: true
+                lastAuthor:
+                  type: string
+                  example: null,
+                lastGenre:
+                  type: string
+                  example: null,
+                updatedAt:
+                  type: string
+                  example: 2023-12-14T20:29:02.595Z
+                createdAt:
+                  type: string
+                  example: 2023-12-14T20:29:02.595Z
+
+
+    #ALL
     BadRequest:
       description: "Bad Request - This could be due to missing fields, invalid data, etc"
       content:
@@ -199,7 +255,7 @@ components:
             properties:
               error:
                 type: string
-                example:  Unauthorized access. This resource is reserved for users with superadmin privileges
+                example: Unauthorized access. This resource is reserved for users with superadmin privileges
 
   securitySchemes:
     token:

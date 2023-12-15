@@ -11,6 +11,7 @@ import compression from "compression";
 import helmet from "helmet";
 import xss from "xss-clean";
 import csurf from "csurf";
+import cors from "cors"
 
 // Documentación
 import swaggerUi from "swagger-ui-express";
@@ -37,6 +38,9 @@ app.use(helmet());
 
 //middleware de seguridad - Limpia la entrada de los usuarios
 app.use(xss());
+
+//middleware de seguridad - Limpia la entrada de los usuarios
+app.use(cors());
 
 //middleware de seguridad - Protege contra ataques CSRF
 const csrfProtection = csurf({ cookie: true });

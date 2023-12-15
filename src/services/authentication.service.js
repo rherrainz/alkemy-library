@@ -6,16 +6,14 @@ import { info } from "../log/logger.log.js";
 
 const authentication = async (email, password) => {
   try {
-    let apiError = new ApiError("Credenciales incorrectas", 401);
     const result = await UserService.findUserByEmailAndPassword(
       email,
       password,
     );
 
-    if (!result) throw apiError;
+    if (!result) throw new ApiError("Invalid credentials", 401);;
 
-    if (!result.isActive)
-      throw new ApiError("Confirmá tu cuenta para seguir", 401);
+    if (!result.isActive) throw new ApiError("Confirmá tu cuenta para seguir", 401);
     const token = jwt.sign(
       result,
       process.env.JWT_SECRETKEY /*{ expiresIn: "1h" }*/,
@@ -26,7 +24,7 @@ const authentication = async (email, password) => {
 
     return token;
   } catch (error) {
-    throw new ApiError(error.message);
+    throw error;
   }
 };
 
