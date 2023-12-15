@@ -1,0 +1,385 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: Alkemy Library
+  description: Api
+  contact:
+    email: alkemylibrary@gmail.com
+
+servers:
+  - description: Servidor Local
+    url: http://localhost:3000/api
+
+tags:
+  - name: auth
+    description: ""
+  - name: user
+    description: ""
+  - name: book
+    description: ""
+  - name: author
+    description: ""
+  - name: event
+    description: ""
+  - name: genre
+    description: ""
+  - name: language
+    description: ""
+  - name: loan
+    description: ""
+  - name: review
+    description: ""
+
+paths:
+  # AUTH
+  /login:
+    post:
+      tags:
+        - auth
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        "200":
+          $ref: "#/components/responses/Login"
+        "401":
+          $ref: "#/components/responses/InvalidCredentials"
+        "422":
+          $ref: "#/components/responses/BadRequest"
+
+  # USER
+  /user:
+    get:
+      security:
+        - token: []
+      tags:
+        - user
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+          required: false
+          description: This parameter is optional, it is used for pagination.
+      responses:
+        "200":
+          $ref: "#/components/responses/UserGetAll"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      tags:
+        - auth
+      summary: Register a new user
+      description: Enables a new user to sign up to the system by providing required details like firstName, lastName, email and password. Once registered, they can log in using their credentials.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Register"
+      responses:
+        "201":
+          $ref: "#/components/responses/Register"
+        "409":
+          description: Conflict - This could be due to an invalid email.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The email address is already registered
+        "422":
+          $ref: "#/components/responses/BadRequest"
+
+  /user/params:
+    get:
+      security:
+        - token: []
+      tags:
+        - user
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: false
+          description: This parameter is optional. Filter by email if provided.
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: false
+          description: This parameter is optional. Filter by first name if provided.
+        - in: query
+          name: surname
+          schema:
+            type: string
+          required: false
+          description: This parameter is optional. Filter by last name if provided.
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
+      responses:
+        "200":
+          $ref: "#/components/responses/UserGetAll"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /user/{id}:
+    get:
+      security:
+        - token: []
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ""
+          schema:
+            type: string
+            example: 94ff6869-8044-435b-8109-5570b877c56d
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
+      responses:
+        "200":
+          $ref: "#/components/responses/UserGetAll"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+    delete:
+      security:
+        - token: []
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ""
+          schema:
+            type: string
+            example: 94ff6869-8044-435b-8109-5570b877c56d
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: User deleted successfully
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/UnauthorizedSupAdmin"
+
+
+
+components:
+  schemas:
+    # AUTH
+    Register:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Name
+        lastName:
+          type: string
+          example: LastName
+        email:
+          type: string
+          example: user@user.com
+        password:
+          type: string
+          example: password
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@user.com
+        password:
+          type: string
+          example: password
+
+  responses:
+    # AUTH - 200
+    Register:
+      description: Created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: 0987ed9d-2ffd-4e5f-9da0-133952194751
+              firstName:
+                type: string
+                example: Name
+              lastName:
+                type: string
+                example: LastName
+              email:
+                type: string
+                example: user@user.com
+              password:
+                type: string
+                example: password
+              role:
+                type: string
+                example: user
+              isActive:
+                type: boolean
+                example: true
+              updatedAt:
+                type: string
+                example: 2023-12-14T20:29:02.595Z
+              createdAt:
+                type: string
+                example: 2023-12-14T20:29:02.595Z
+    Login:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlNGM5MWRjLWI0MzItNDFmYy05N2I0LWE0MzgyMGVjYTA4OSIsImZpcnN0TmFtZSI6Ik5vbWJyZSIsImxhc3ROYW1lIjoiQXBlbGxpZG8iLCJlbWFpbCI6ImVyZGluaS5keWxhbkBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRuSGdkQWZwZXVjTnhHcFgwTDZjZ1dPUjJYa0tibnVHbHd6LkZja1ZQMEx3ZlFKZFZRVFNmNiIsImlzQWN0aXZlIjp0cnVlLCJyb2xlIjoidXNlciIsImNyZWF0ZWRBdCI6IjIwMjMtMTItMDZUMjA6Mjk6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjMtMTItMDZUMjA6Mjk6MTcuMDAwWiIsImlhdCI6MTcwMjEzOTg0MX0.1Kk7IgeIdVnEZzrht4dkTgmH3m2alCoY84MKr7vy3tQ
+    # AUTH - ERROR
+    InvalidCredentials:
+      description: Unauthorized - This could be due to invalid credentials or having the account inactive.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Invalid credentials
+
+    # USER - 200
+    UserGetAll:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  example: 0987ed9d-2ffd-4e5f-9da0-133952194751
+                firstName:
+                  type: string
+                  example: Name
+                lastName:
+                  type: string
+                  example: LastName
+                email:
+                  type: string
+                  example: user@user.com
+                password:
+                  type: string
+                  example: password
+                role:
+                  type: string
+                  example: user
+                isActive:
+                  type: boolean
+                  example: true
+                lastAuthor:
+                  type: string
+                  example: null,
+                lastGenre:
+                  type: string
+                  example: null,
+                updatedAt:
+                  type: string
+                  example: 2023-12-14T20:29:02.595Z
+                createdAt:
+                  type: string
+                  example: 2023-12-14T20:29:02.595Z
+
+
+    #ALL - ERROR
+    BadRequest:
+      description: Bad Request - This could be due to missing fields, invalid data, etc
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "The field is required"
+    InvalidId:
+      description: Bad Request - This is because the selected ID is not valid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Not a valid ID"
+    Unauthorized:
+      description: Unauthorized - This could be due to not sending a token or sending an invalid one.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Token is invalid
+    UnauthorizedAdmin:
+      description: Unauthorized - This could be due to not sending a token or not having admin privileges."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unauthorized access. This resource is reserved for users with superadmin or admin privileges.
+    UnauthorizedSupAdmin:
+      description: Unauthorized access - This could be due to not sending a token or not having superadmin privileges.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unauthorized access. This resource is reserved for users with superadmin privileges
+
+  securitySchemes:
+    token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

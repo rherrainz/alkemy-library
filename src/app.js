@@ -11,6 +11,12 @@ import compression from "compression";
 import helmet from "helmet";
 import xss from "xss-clean";
 import csurf from "csurf";
+import cors from "cors"
+
+// Documentación
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
+const swaggerDocs = YAML.load("./src/docs/swagger.docs.yaml");
 
 import http from "http";
 import { Server } from "socket.io";
@@ -32,6 +38,9 @@ app.use(helmet());
 
 //middleware de seguridad - Limpia la entrada de los usuarios
 app.use(xss());
+
+//middleware de seguridad - Limpia la entrada de los usuarios
+app.use(cors());
 
 //middleware de seguridad - Protege contra ataques CSRF
 const csrfProtection = csurf({ cookie: true });
@@ -70,6 +79,7 @@ const PORT = process.env.PORT || 3000;
 
 //ROUTES
 app.use("/api", indexRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }));
 
 //TODO: MIDDLEWARE para atrapar errores NATIVOS
 app.use((req, res, next) => {

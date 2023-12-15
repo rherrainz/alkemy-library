@@ -7,7 +7,7 @@ import { messages } from "../messages/messages.js";
 //MÉTODO UTILIZADO EN EL AUTH SERVICE
 const findUserByEmailAndPassword = async (email, password) => {
   const user = await UserRepository.getUserByEmail(email);
-  if (!user) throw new ApiError("Credenciales incorrectas");
+  if (!user) throw new ApiError("Invalid credentials");
   const isPasswordValid = await comparePassword(
     password,
     user.dataValues.password,
@@ -26,8 +26,8 @@ const getAll = async (page) => {
   return await UserRepository.getAll(options);
 };
 
-const getByParams = async ({email, name,surname}) => {
-  return await UserRepository.getByParams({email, name,surname});
+const getByParams = async ({ email, name, surname }) => {
+  return await UserRepository.getByParams({ email, name, surname });
 }
 
 const getById = async (id) => {
@@ -59,7 +59,9 @@ const update = async (id, user) => {
 };
 
 const deleteById = async (id) => {
-  return await UserRepository.remove(id);
+  const userDeleted = await UserRepository.remove(id);
+  if (userDeleted.includes(0)) throw new ApiError("Invalid ID", 400)
+  return userDeleted
 };
 
 export const UserService = {

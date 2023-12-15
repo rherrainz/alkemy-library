@@ -6,7 +6,7 @@ export const isAuthenticated = async (req, res, next) => {
   const bearerToken = req.headers.authorization;
 
   if (bearerToken === undefined || !bearerToken)
-    next(new ApiError("Unauthorized acces, you did not send a token", 401));
+    next(new ApiError("Unauthorized access, you did not send a token", 401));
 
   try {
     const { id, email, role, isActive } = await decode(bearerToken);
@@ -34,7 +34,7 @@ export const isAuthenticated = async (req, res, next) => {
 export const isAdmin = async (req, res, next) => {
   const bearerToken = req.headers.authorization;
   if (bearerToken === undefined || !bearerToken)
-    next(new ApiError("Unauthorized acces, you did not send a token", 401));
+    next(new ApiError("Unauthorized access, you did not send a token", 401));
 
   try {
     const { id, email, role, isActive } = await decode(bearerToken);
@@ -67,7 +67,7 @@ export const isAdmin = async (req, res, next) => {
 export const isSupAdmin = async (req, res, next) => {
   const bearerToken = req.headers.authorization;
   if (bearerToken === undefined || !bearerToken)
-    next(new ApiError("Unauthorized acces, you did not send a token", 401));
+    next(new ApiError("Unauthorized access, you did not send a token", 401));
 
   try {
     const { id, email, role, isActive } = await decode(bearerToken);
