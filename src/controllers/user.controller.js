@@ -36,7 +36,7 @@ const create = async (req, res, next, userService) => {
   } catch (error) {
 
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(HTTP_STATUSES.CONFILCT).json({ error: 'El correo electrónico ya se encuentra registrado' });
+      return res.status(HTTP_STATUSES.CONFILCT).json({ error: 'The email address is already registered' });
     }
     next(new ApiError(error.message));
   }
@@ -62,9 +62,9 @@ const update = async (req, res, next) => {
 const deleteById = async (req, res, next) => {
   try {
     const result = await UserService.deleteById(req.params.id);
-    res.status(HTTP_STATUSES.OK).json({ data: result });
+    res.status(HTTP_STATUSES.OK).json({ msg: "User deleted successfully" });
   } catch (error) {
-    next(new ApiError(error.message));
+    next(error);
   }
 };
 

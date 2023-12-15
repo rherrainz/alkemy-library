@@ -61,7 +61,7 @@ const remove = async (id) => {
     {
       isActive: false,
     },
-    { where: { id: id } }
+    { where: { id: id, isActive: true } }
   );
 };
 

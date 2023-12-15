@@ -31,24 +31,7 @@ tags:
     description: ""
 
 paths:
-  # AUTHENTICATION
-  /user/register:
-    post:
-      tags:
-        - auth
-      summary: Register a new user
-      description: Enables a new user to sign up to the system by providing required details like firstName, lastName, email and password. Once registered, they can log in using their credentials.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Register"
-      responses:
-        "201":
-          $ref: "#/components/responses/Register"
-        "422":
-          $ref: "#/components/responses/BadRequest"
+  # AUTH
   /login:
     post:
       tags:
@@ -70,6 +53,7 @@ paths:
         "422":
           $ref: "#/components/responses/BadRequest"
 
+  # USER
   /user:
     get:
       security:
@@ -79,14 +63,139 @@ paths:
       #TODO: completar summary y description
       summary: ""
       description: ""
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+          required: false
+          description: This parameter is optional, it is used for pagination.
+      responses:
+        "200":
+          $ref: "#/components/responses/UserGetAll"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      tags:
+        - auth
+      summary: Register a new user
+      description: Enables a new user to sign up to the system by providing required details like firstName, lastName, email and password. Once registered, they can log in using their credentials.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Register"
+      responses:
+        "201":
+          $ref: "#/components/responses/Register"
+        "409":
+          description: Conflict - This could be due to an invalid email.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: The email address is already registered
+        "422":
+          $ref: "#/components/responses/BadRequest"
+
+  /user/params:
+    get:
+      security:
+        - token: []
+      tags:
+        - user
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: false
+          description: This parameter is optional. Filter by email if provided.
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: false
+          description: This parameter is optional. Filter by first name if provided.
+        - in: query
+          name: surname
+          schema:
+            type: string
+          required: false
+          description: This parameter is optional. Filter by last name if provided.
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
       responses:
         "200":
           $ref: "#/components/responses/UserGetAll"
         "401":
           $ref: "#/components/responses/Unauthorized"
 
+  /user/{id}:
+    get:
+      security:
+        - token: []
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ""
+          schema:
+            type: string
+            example: 94ff6869-8044-435b-8109-5570b877c56d
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
+      responses:
+        "200":
+          $ref: "#/components/responses/UserGetAll"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+    delete:
+      security:
+        - token: []
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ""
+          schema:
+            type: string
+            example: 94ff6869-8044-435b-8109-5570b877c56d
+      #TODO: completar summary y description
+      summary: ""
+      description: ""
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: User deleted successfully
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/UnauthorizedSupAdmin"
+
+
+
 components:
   schemas:
+    # AUTH
     Register:
       type: object
       properties:
@@ -123,6 +232,7 @@ components:
             properties:
               id:
                 type: string
+                format: uuid
                 example: 0987ed9d-2ffd-4e5f-9da0-133952194751
               firstName:
                 type: string
@@ -182,6 +292,7 @@ components:
               properties:
                 id:
                   type: string
+                  format: uuid
                   example: 0987ed9d-2ffd-4e5f-9da0-133952194751
                 firstName:
                   type: string
@@ -215,9 +326,9 @@ components:
                   example: 2023-12-14T20:29:02.595Z
 
 
-    #ALL
+    #ALL - ERROR
     BadRequest:
-      description: "Bad Request - This could be due to missing fields, invalid data, etc"
+      description: Bad Request - This could be due to missing fields, invalid data, etc
       content:
         application/json:
           schema:
@@ -226,6 +337,16 @@ components:
               error:
                 type: string
                 example: "The field is required"
+    InvalidId:
+      description: Bad Request -This is because the selected ID is not valid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Not a valid ID"
     Unauthorized:
       description: Unauthorized - This could be due to not sending a token or sending an invalid one.
       content:
@@ -246,7 +367,7 @@ components:
               error:
                 type: string
                 example: Unauthorized access. This resource is reserved for users with superadmin or admin privileges.
-    UnauthorizeSupAdmin:
+    UnauthorizedSupAdmin:
       description: Unauthorized access - This could be due to not sending a token or not having superadmin privileges.
       content:
         application/json:
