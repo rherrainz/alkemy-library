@@ -25,10 +25,9 @@ describe('Genre Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().resolves(data);
-        const genreService = { create: mockCreate };
 
         // Ejecuta la función add del controlador
-        await GenreController.add(mockRequest, mockResponse, mockNext, genreService);
+        await GenreController.add(mockRequest, mockResponse, mockNext, mockCreate);
 
         // Verifica que la respuesta sea correcta
         mockResponse.status.calledWith(201);
@@ -60,9 +59,8 @@ describe('Genre Controller - add function', () => {
 
         // Mock del servicio para simular la creación exitosa
         const mockCreate = sinon.stub().rejects(new Error('Error. No se ha podido crear el género'));
-        const genreService = { create: mockCreate };
 
-        await GenreController.add(mockRequest, mockResponse, mockNext, genreService);
+        await GenreController.add(mockRequest, mockResponse, mockNext, mockCreate);
 
         sinon.assert.calledWith(mockNext, sinon.match.instanceOf(Error).and(sinon.match.has('message', 'Error. No se ha podido crear el género')))
     })
