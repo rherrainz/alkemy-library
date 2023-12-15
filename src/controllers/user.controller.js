@@ -31,13 +31,12 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next, userService) => {
   try {
-    const result = await userService.create(req.body);
+    const result = await userService(req.body);
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
   } catch (error) {
-    
-    if(error.name === 'SequelizeUniqueConstraintError')
-    {
-      res.status(HTTP_STATUSES.CONFILCT).json({ error: 'El correo electrónico ya se encuentra registrado' });
+
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(HTTP_STATUSES.CONFILCT).json({ error: 'El correo electrónico ya se encuentra registrado' });
     }
     next(new ApiError(error.message));
   }

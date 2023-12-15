@@ -1,0 +1,208 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: Alkemy Library
+  description: Api
+  contact:
+    email: alkemylibrary@gmail.com
+
+servers:
+  - description: Servidor Local
+    url: http://localhost:3000
+
+tags:
+  - name: auth
+    description: ""
+  - name: user
+    description: ""
+  - name: book
+    description: ""
+  - name: author
+    description: ""
+  - name: event
+    description: ""
+  - name: genre
+    description: ""
+  - name: language
+    description: ""
+  - name: loan
+    description: ""
+  - name: review
+    description: ""
+
+paths:
+  /user:
+    get:
+      security:
+        - token: []
+      tags:
+        - user
+      #TODO: Rellenar los campos faltantes
+      summary: ""
+      description: ""
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 0987ed9d-2ffd-4e5f-9da0-133952194751
+                    firstName:
+                      type: string
+                      example: Name
+                    lastName:
+                      type: string
+                      example: LastName
+                    email:
+                      type: string
+                      example: user@user.com
+                    password:
+                      type: string
+                      example: password
+                    role:
+                      type: string
+                      example: user
+                    isActive:
+                      type: boolean
+                      example: true
+                    lastAuthor: 
+                      type: string
+                      example: null,
+                    lastGenre: 
+                      type: string
+                      example: null,
+                    updatedAt: 
+                      type: string
+                      example: 2023-12-14T20:29:02.595Z
+                    createdAt: 
+                      type: string
+                      example: 2023-12-14T20:29:02.595Z
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+
+  /user/register:
+    post:
+      tags:
+        - user
+      summary: Register a new user
+      description: Enables a new user to sign up to the system by providing required details like firstName, lastName, email and password. Once registered, they can log in using their credentials.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRegistration"
+      responses:
+        "201":
+          $ref: "#/components/responses/UserCreate"
+        "422":
+          $ref: "#/components/responses/BadRequest"
+
+
+components:
+  schemas:
+    UserRegistration:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Name
+        lastName:
+          type: string
+          example: LastName
+        email:
+          type: string
+          example: user@user.com
+        password:
+          type: string
+          example: password
+
+  responses:
+    UserCreate:
+      description: Created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 0987ed9d-2ffd-4e5f-9da0-133952194751
+              firstName:
+                type: string
+                example: Name
+              lastName:
+                type: string
+                example: LastName
+              email:
+                type: string
+                example: user@user.com
+              password:
+                type: string
+                example: password
+              role:
+                type: string
+                example: user
+              isActive:
+                type: boolean
+                example: true
+              updatedAt: 
+                type: string
+                example: 2023-12-14T20:29:02.595Z
+              createdAt: 
+                type: string
+                example: 2023-12-14T20:29:02.595Z
+
+    BadRequest:
+      description: "Bad Request - This could be due to missing fields, invalid data, etc"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "The field is required"
+    Unauthorized:
+      description: Unauthorized - This could be due to not sending a token or sending an invalid one.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Token is invalid
+    UnauthorizedAdmin:
+      description: Unauthorized - This could be due to not sending a token or not having admin privileges."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unauthorized access. This resource is reserved for users with superadmin or admin privileges.
+    UnauthorizeSupAdmin:
+      description: Unauthorized access - This could be due to not sending a token or not having superadmin privileges.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example:  Unauthorized access. This resource is reserved for users with superadmin privileges
+
+  securitySchemes:
+    token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
