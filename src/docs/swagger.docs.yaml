@@ -338,7 +338,7 @@ components:
                 type: string
                 example: "The field is required"
     InvalidId:
-      description: Bad Request -This is because the selected ID is not valid
+      description: Bad Request - This is because the selected ID is not valid
       content:
         application/json:
           schema:
