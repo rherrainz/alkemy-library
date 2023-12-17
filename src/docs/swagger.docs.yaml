@@ -196,7 +196,6 @@ paths:
           schema:
             type: string
             example: 94ff6869-8044-435b-8109-5570b877c56d
-      #TODO: completar summary y description
       summary: Modify user data by ID
       description: Allows modifying the data of the authenticated user by passing the required user ID in the route.
       responses:
@@ -214,6 +213,99 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/UnauthorizedUpdate"
+
+  # BOOK
+  /book/all:
+    get:
+      security:
+        - token: []
+      tags:
+        - book
+      summary: Get book list
+      description: Retrieves a comprehensive list of all books available in the system, detailing title, authors and other relevant information.
+      responses:
+        "200":
+          $ref: "#/components/responses/BookGetAll"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+
+  /book/:
+    post:
+      tags:
+        - book
+      summary: Register a new book
+      description: Enables a the creation of a new book.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBook"
+      responses: 
+        "201":
+          $ref: "#/components/responses/BookCreate"
+        "401":
+           $ref: "#/components/responses/Unauthorized"
+
+  /book/{id}:
+    patch:
+      security:
+        - token: []
+      tags:
+        - book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Book Id
+          schema:
+            type: string
+            example: 94ff6869-8044-435b-8109-5570b877c56d
+      summary: Modify book data by ID
+      description: Allows modifying the data of the selected book by passing the required book ID in the route.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Book modified successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    delete:
+      security:
+        - token: []
+      tags:
+        - book
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Book Id
+          schema:
+            type: string
+            example: f4edce21-57a0-479e-b44a-6c5de06acc65
+      summary: Soft delete book by ID
+      description: Allows performing a soft deletion of a user by passing the required book ID in the route. 
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Book deleted successfully
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
 
   # LOAN
   /loan:
@@ -365,6 +457,38 @@ components:
           type: string
           example: password
 
+    # BOOK
+    CreateBook:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Book title
+        ISBN:
+          type: string
+          example: 978-3-16-148410-0
+        edition:
+          type: string
+          example: First
+        year:
+          type: integer
+          example: 1956
+        numberOfPages:
+          type: integer
+          example: 500
+        authorId:
+          type: array
+          items:
+            type: string
+        genreId:
+          type: array
+          items:
+            type: string
+        languageId:
+          type: array
+          items:
+            type: string
+
     # LOAN
     LoanCreate:
       type: object
@@ -494,6 +618,103 @@ components:
                 type: string
                 example: Unauthorized access, you can only update your own data
 
+    # BOOK - 200
+    BookGetAll:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  example: ec56a27b-9b85-4c63-ba78-17d55310e96c
+                title:
+                  type: string
+                  example: Book title
+                ISBN:
+                  type: string
+                  example: 978-3-16-148410-0
+                edition:
+                  type: string
+                  example: first
+                year:
+                  type: integer
+                  example: 1956
+                numberOfPages:
+                  type: integer
+                  example: 500
+                publisher:
+                  type: string
+                  example: Publisher name
+                avgScore:
+                  type: number
+                  example: 3,5
+                isLoaned:
+                  type: boolean
+                  example: true
+                isLongLoan:
+                  type: boolean
+                  example: false
+                isActive:
+                  type: boolean
+                  example: true
+                createdAt:
+                  type: string
+                  example: 2023-12-14T20:29:02.595Z
+                updatedAt:
+                  type: string
+                  example: 2023-12-14T20:29:02.595Z
+    BookCreate:
+      description: Created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                example: f4edce21-57a0-479e-b44a-6c5de06acc65
+              avgScore: 
+                type: number
+                example: 0
+              isLoaned: 
+                type: boolean
+                example: false
+              isLongLoan: 
+                type: boolean
+                example: false
+              isActive: 
+                type: boolean
+                example: true
+              title: 
+                type: string
+                example: The Hobbit
+              ISBN:
+                type: string
+                example: 9780007525508
+              edition:
+                type: string
+                example: first
+              year: 
+                type: integer
+                example: 1937
+              numberOfPages: 
+                type: integer
+                example: 310
+              publisher:
+                type: string
+                example: George Allen & Unwin
+              CreatedAt: 
+                type: string
+                example: "2023-12-12T19:15:55.000Z"
+              updatedAt: 
+                type: string
+                example: "2023-12-12T19:15:55.000Z" 
+              
     # LOAN - 200
     LoanGetAll:
       description: OK
