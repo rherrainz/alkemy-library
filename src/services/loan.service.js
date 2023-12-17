@@ -86,8 +86,8 @@ const create = async (loan, user, bookId) => {
       }
     });
 
-  //SE ACTUALIZA EL LOG
-  info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
+    //SE ACTUALIZA EL LOG
+    info(user.email, `Préstamo realizado | Libro ID: ${bookId}`);
 
 
     return loanCreated;
@@ -96,8 +96,11 @@ const create = async (loan, user, bookId) => {
   }
 };
 
-const update = async (id, arrayId) => {
-  return await LoanRepository.update(id, arrayId);
+const update = async (id, body) => {
+  const { startDate, dueDate } = body
+  const loanModified = await LoanRepository.update(id, { startDate, dueDate });
+  if (loanModified.includes(0)) throw new ApiError("Invalid ID", 400)
+  return loanModified
 };
 
 const remove = async (id) => {
