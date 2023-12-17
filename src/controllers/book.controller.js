@@ -97,7 +97,7 @@ const create = async (req, res, next, bookService) => {
 const update = async (req, res, next) => {
   try {
     const result = await BookService.update(req.params.id, req.body);
-    res.status(HTTP_STATUSES.ACCEPTED).json({ data: result });
+    res.status(HTTP_STATUSES.ACCEPTED).json({ msg: "Book updated successfully" });
   } catch (error) {
     next(error);
   }
@@ -115,7 +115,7 @@ const returnBook = async (req, res, next, io) => {
 const remove = async (req, res, next) => {
   try {
     const result = await BookService.remove(req.params.id);
-    res.status(HTTP_STATUSES.OK).json({ data: result });
+    res.status(HTTP_STATUSES.OK).json({ msg: "Book deleted successfully" });
   } catch (error) {
     next(error);
   }
