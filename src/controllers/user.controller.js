@@ -49,7 +49,7 @@ const update = async (req, res, next) => {
 
     // Check if the user is trying to update their own data
     if (userIdFromToken !== requestedUserId) {
-      return next(new ApiError("Unauthorized access, you can only update your own data", 403));
+      return next(new ApiError("Unauthorized access, you can only update your own data", HTTP_STATUSES.FORBIDDEN));
     }
 
     const result = await UserService.update(requestedUserId, req.body);

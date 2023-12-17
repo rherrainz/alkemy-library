@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: "1.0.0"
   title: Alkemy Library
-  description: Api
+  description: Data management API for a library
   contact:
     email: alkemylibrary@gmail.com
 
@@ -17,6 +17,8 @@ tags:
     description: ""
   - name: book
     description: ""
+  - name: loan
+    description: ""
   - name: author
     description: ""
   - name: event
@@ -24,8 +26,6 @@ tags:
   - name: genre
     description: ""
   - name: language
-    description: ""
-  - name: loan
     description: ""
   - name: review
     description: ""
@@ -36,9 +36,8 @@ paths:
     post:
       tags:
         - auth
-      #TODO: completar summary y description
-      summary: ""
-      description: ""
+      summary: Log in user
+      description: Allows the user to log in by providing an email and password.
       requestBody:
         required: true
         content:
@@ -60,9 +59,8 @@ paths:
         - token: []
       tags:
         - user
-      #TODO: completar summary y description
-      summary: ""
-      description: ""
+      summary: Returns all users
+      description: Returns all users with the option for pagination using query parameters.
       parameters:
         - in: query
           name: page
@@ -73,14 +71,14 @@ paths:
           description: This parameter is optional, it is used for pagination.
       responses:
         "200":
-          $ref: "#/components/responses/UserGetAll"
+          $ref: "#/components/responses/UserGet"
         "401":
           $ref: "#/components/responses/Unauthorized"
     post:
       tags:
         - auth
       summary: Register a new user
-      description: Enables a new user to sign up to the system by providing required details like firstName, lastName, email and password. Once registered, they can log in using their credentials.
+      description: Allows registering a new user by providing basic information such as first name, last name, email, and password. After registration, users can log in.
       requestBody:
         required: true
         content:
@@ -102,7 +100,6 @@ paths:
                     example: The email address is already registered
         "422":
           $ref: "#/components/responses/BadRequest"
-
   /user/params:
     get:
       security:
@@ -128,15 +125,13 @@ paths:
             type: string
           required: false
           description: This parameter is optional. Filter by last name if provided.
-      #TODO: completar summary y description
-      summary: ""
-      description: ""
+      summary: Get users with filters
+      description: Lists all users with the option to search by optional query parameters such as email, name, and surname.
       responses:
         "200":
-          $ref: "#/components/responses/UserGetAll"
+          $ref: "#/components/responses/UserGet"
         "401":
           $ref: "#/components/responses/Unauthorized"
-
   /user/{id}:
     get:
       security:
@@ -147,16 +142,15 @@ paths:
         - name: id
           in: path
           required: true
-          description: ""
+          description: User Id
           schema:
             type: string
             example: 94ff6869-8044-435b-8109-5570b877c56d
-      #TODO: completar summary y description
-      summary: ""
-      description: ""
+      summary: Retrieve user data by ID
+      description: Allows displaying the data of a user by passing the required user ID in the route.
       responses:
         "200":
-          $ref: "#/components/responses/UserGetAll"
+          $ref: "#/components/responses/UserGet"
         "401":
           $ref: "#/components/responses/UnauthorizedAdmin"
     delete:
@@ -168,16 +162,15 @@ paths:
         - name: id
           in: path
           required: true
-          description: ""
+          description: User Id
           schema:
             type: string
             example: 94ff6869-8044-435b-8109-5570b877c56d
-      #TODO: completar summary y description
-      summary: ""
-      description: ""
+      summary: Soft delete user by ID
+      description: Allows performing a soft deletion of a user by passing the required user ID in the route. 
       responses:
         "200":
-          description: Created
+          description: OK
           content:
             application/json:
               schema:
@@ -190,7 +183,158 @@ paths:
           $ref: "#/components/responses/InvalidId"
         "401":
           $ref: "#/components/responses/UnauthorizedSupAdmin"
+    patch:
+      security:
+        - token: []
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User Id
+          schema:
+            type: string
+            example: 94ff6869-8044-435b-8109-5570b877c56d
+      #TODO: completar summary y description
+      summary: Modify user data by ID
+      description: Allows modifying the data of the authenticated user by passing the required user ID in the route.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: User modified successfully
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/UnauthorizedUpdate"
 
+  # LOAN
+  /loan:
+    get:
+      security:
+        - token: []
+      tags:
+        - loan
+      summary: Retrieve all loans
+      description: Returns all loan records.
+      responses:
+        "200":
+          $ref: "#/components/responses/LoanGetAll"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+    post:
+      security:
+        - token: []
+      tags:
+        - loan
+      summary: Create a new loan
+      description: Creates a new loan by providing a start date, due date, and the book ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoanCreate"
+      responses:
+        "201":
+          $ref: "#/components/responses/LoanCreate"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/BadRequest"
+  /loan/{id}:
+    get:
+      security:
+        - token: []
+      tags:
+        - loan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Loan Id
+          schema:
+            type: string
+            example: b0ff23ac-2b19-46cc-89e5-d2636983c574
+      summary: Retrieve loan details by ID
+      description: Allows retrieving details of a specific loan by providing the required loan ID.
+      responses:
+        "200":
+          $ref: "#/components/responses/LoanGetById"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+  /loan/dueDate/{dueDate}:
+    get:
+      security:
+        - token: []
+      tags:
+        - loan
+      parameters:
+        - name: dueDate
+          in: path
+          required: true
+          description: Loan Due Date
+          schema:
+            type: string
+            example: 2023-12-09
+      summary: Retrieve loans by due date
+      description: Lists all loans that match the due date provided in the route.
+      responses:
+        "200":
+          $ref: "#/components/responses/LoanGetByDueDate"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+  /loan/edit/{id}:
+    patch:
+      security:
+        - token: []
+      tags:
+        - loan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Loan Id
+          schema:
+            type: string
+            example: b0ff23ac-2b19-46cc-89e5-d2636983c574
+      summary: Modify loan dates by ID
+      description: Allows modifying the start date and due date of a loan by providing the required loan ID in the route.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Loan modified successfully
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
+  /loan/export-csv/all:
+    get:
+      security:
+        - token: []
+      tags:
+        - loan
+      summary: Export all loan data to CSV
+      description: Allows exporting all loan data to a CSV file.
+      responses:
+        "200":
+          $ref: "#/components/responses/LoanExportCsv"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAdmin"
 
 
 components:
@@ -220,6 +364,20 @@ components:
         password:
           type: string
           example: password
+
+    # LOAN
+    LoanCreate:
+      type: object
+      properties:
+        startDate:
+          type: string
+          example: 2000-07-10
+        dueDate:
+          type: string
+          example: 2000-07-10
+        bookId:
+          type: string
+          example: e8d72475-8da6-424d-bbda-9f57c84314c8
 
   responses:
     # AUTH - 200
@@ -281,7 +439,7 @@ components:
                 example: Invalid credentials
 
     # USER - 200
-    UserGetAll:
+    UserGet:
       description: OK
       content:
         application/json:
@@ -324,7 +482,311 @@ components:
                 createdAt:
                   type: string
                   example: 2023-12-14T20:29:02.595Z
+    # USER - ERROR
+    UnauthorizedUpdate:
+      description: Forbidden - This may be because you are trying to modify another user."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unauthorized access, you can only update your own data
 
+    # LOAN - 200
+    LoanGetAll:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 0083d571-9119-4a33-986e-84522009c824
+                startDate: 
+                  type: string
+                  example: "2023-12-06"
+                dueDate: 
+                  type: string
+                  example: "2023-12-09"
+                isReturned: 
+                  type: boolean
+                  example: false
+                createdAt: 
+                  type: string
+                  example: "2023-12-12T19:15:55.000Z"
+                updatedAt: 
+                  type: string
+                  example: "2023-12-12T19:15:55.000Z"
+                bookId:
+                  type: string
+                  example: e8d72475-8da6-424d-bbda-9f57c84314c8
+                userId:
+                  type: string
+                  example: 4e4c91dc-b432-41fc-97b4-a43820eca089
+                user: 
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 0987ed9d-2ffd-4e5f-9da0-133952194751
+                    firstName:
+                      type: string
+                      example: Name
+                    lastName:
+                      type: string
+                      example: LastName
+                    email:
+                      type: string
+                      example: user@user.com
+                    password:
+                      type: string
+                      example: password
+                    role:
+                      type: string
+                      example: user
+                    isActive:
+                      type: boolean
+                      example: true
+                    lastAuthor:
+                      type: string
+                      example: 39a47637-86aa-40f9-b9d3-70cee9947672,
+                    lastGenre:
+                      type: string
+                      example: 1b923514-34ee-46d5-b40a-2070b4ac9a2a,
+                    updatedAt:
+                      type: string
+                      example: 2023-12-14T20:29:02.595Z
+                    createdAt:
+                      type: string
+                      example: 2023-12-14T20:29:02.595Z
+                book:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: e8d72475-8da6-424d-bbda-9f57c84314c8
+                    title:
+                      type: string
+                      example: Book title
+                    ISBN:
+                      type: string
+                      example: 978-3-16-148410-0
+                    edition:
+                      type: string
+                      example: First
+                    year:
+                      type: integer
+                      example: 1956
+                    numberOfPages:
+                      type: integer
+                      example: 500
+                    avgScore:
+                      type: integer
+                      example: 0
+                    isLoaned:
+                      type: boolean
+                      example: true
+                    isLongLoan:
+                      type: boolean
+                      example: false
+                    isActive:
+                      type: boolean
+                      example: true
+                    updatedAt:
+                      type: string
+                      example: 2023-12-12T02:30:20.000Z
+                    createdAt:
+                      type: string
+                      example: 2023-12-12T21:22:19.000Z
+    LoanCreate:
+      description: Created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                example: b0ff23ac-2b19-46cc-89e5-d2636983c574
+              isReturned: 
+                type: boolean
+                example: false
+              startDate: 
+                type: string
+                example: "2023-12-06"
+              dueDate: 
+                type: string
+                example: "2023-12-09"
+              bookId:
+                type: string
+                example: e8d72475-8da6-424d-bbda-9f57c84314c8
+              userId:
+                type: string
+                example: 4e4c91dc-b432-41fc-97b4-a43820eca089
+              createdAt: 
+                type: string
+                example: "2023-12-12T19:15:55.000Z"
+              updatedAt: 
+                type: string
+                example: "2023-12-12T19:15:55.000Z"
+    LoanGetById:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 0083d571-9119-4a33-986e-84522009c824
+              startDate: 
+                type: string
+                example: "2023-12-06"
+              dueDate: 
+                type: string
+                example: "2023-12-09"
+              isReturned: 
+                type: boolean
+                example: false
+              createdAt: 
+                type: string
+                example: "2023-12-12T19:15:55.000Z"
+              updatedAt: 
+                type: string
+                example: "2023-12-12T19:15:55.000Z"
+              bookId:
+                type: string
+                example: e8d72475-8da6-424d-bbda-9f57c84314c8
+              userId:
+                type: string
+                example: 4e4c91dc-b432-41fc-97b4-a43820eca089
+              user: 
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 0987ed9d-2ffd-4e5f-9da0-133952194751
+                  firstName:
+                    type: string
+                    example: Name
+                  lastName:
+                    type: string
+                    example: LastName
+                  email:
+                    type: string
+                    example: user@user.com
+                  password:
+                    type: string
+                    example: password
+                  role:
+                    type: string
+                    example: user
+                  isActive:
+                    type: boolean
+                    example: true
+                  lastAuthor:
+                    type: string
+                    example: 39a47637-86aa-40f9-b9d3-70cee9947672,
+                  lastGenre:
+                    type: string
+                    example: 1b923514-34ee-46d5-b40a-2070b4ac9a2a,
+                  updatedAt:
+                    type: string
+                    example: 2023-12-14T20:29:02.595Z
+                  createdAt:
+                    type: string
+                    example: 2023-12-14T20:29:02.595Z
+              book:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: e8d72475-8da6-424d-bbda-9f57c84314c8
+                  title:
+                    type: string
+                    example: Book title
+                  ISBN:
+                    type: string
+                    example: 978-3-16-148410-0
+                  edition:
+                    type: string
+                    example: First
+                  year:
+                    type: integer
+                    example: 1956
+                  numberOfPages:
+                    type: integer
+                    example: 500
+                  avgScore:
+                    type: integer
+                    example: 0
+                  isLoaned:
+                    type: boolean
+                    example: true
+                  isLongLoan:
+                    type: boolean
+                    example: false
+                  isActive:
+                    type: boolean
+                    example: true
+                  updatedAt:
+                    type: string
+                    example: 2023-12-12T02:30:20.000Z
+                  createdAt:
+                    type: string
+                    example: 2023-12-12T21:22:19.000Z
+    LoanGetByDueDate:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 0083d571-9119-4a33-986e-84522009c824
+              startDate: 
+                type: string
+                example: "2023-12-06"
+              dueDate: 
+                type: string
+                example: "2023-12-09"
+              isReturned: 
+                type: boolean
+                example: false
+              createdAt: 
+                type: string
+                example: "2023-12-12T19:15:55.000Z"
+              updatedAt: 
+                type: string
+                example: "2023-12-12T19:15:55.000Z"
+              bookId:
+                type: string
+                example: e8d72475-8da6-424d-bbda-9f57c84314c8
+              userId:
+                type: string
+                example: 4e4c91dc-b432-41fc-97b4-a43820eca089
+              user.email:
+                type: string
+                example: correo@correo.com
+    LoanExportCsv:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                example: CSV file exported successfully
+              result: 
+                type: string
+                example: /export-csv/download/exports_2023-12-17_11-43-16.csv
 
     #ALL - ERROR
     BadRequest:

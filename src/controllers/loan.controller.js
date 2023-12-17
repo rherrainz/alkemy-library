@@ -34,7 +34,7 @@ const create = async (req, res, next, loanService) => {
     const { bookId } = req.body;
     const result = await loanService(
       req.body,
-      user, 
+      user,
       bookId
     );
     res.status(HTTP_STATUSES.CREATED).json({ data: result });
@@ -54,8 +54,8 @@ const remove = async (req, res, next) => {
 
 const edit = async (req, res, next) => {
   try {
-    const result = await LoanService.update(req.params.id, req.params.arrayId);
-    res.status(HTTP_STATUSES.ACCEPTED).json({ data: result });
+    const result = await LoanService.update(req.params.id, req.body);
+    res.status(HTTP_STATUSES.ACCEPTED).json({ msg: "Loan modified successfully" });
   } catch (error) {
     next(error);
   }
