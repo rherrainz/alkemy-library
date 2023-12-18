@@ -46,9 +46,7 @@ const create = async (collection, bookIds) => {
   console.log('Book IDs:', bookIds);
   
   if (books.length > 0) { // Check if any books were found
-    // Assuming a bidirectional association, Sequelize should handle the association
-    // If not, consider explicitly adding the books to the collection:
-    await newCollection.addBooks(books); // Assuming the association method is addBooks
+    await newCollection.addBooks(books);
   } else {
     // Handle the case where no books are found with the given IDs.
     throw new Error("No books found with the specified IDs");
