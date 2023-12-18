@@ -7,6 +7,7 @@ import loan from "./models/loan.model.js";
 import review from "./models/review.model.js";
 import user from "./models/user.model.js";
 import event from "./models/event.model.js";
+import collection from "./models/collection.model.js";
 import "dotenv/config";
 
 let db = {};
@@ -33,6 +34,7 @@ db.Loan = loan(sequelize, Sequelize);
 db.Review = review(sequelize, Sequelize);
 db.User = user(sequelize, Sequelize);
 db.Event = event(sequelize, Sequelize);
+db.Collection = collection(sequelize, Sequelize);
 
 db.Author.associate(db);
 db.Book.associate(db);
@@ -42,5 +44,6 @@ db.Loan.associate(db);
 db.Review.associate(db);
 db.User.associate(db);
 db.Event.associate(db);
+db.Collection.associate(db);
 
 export { db };
