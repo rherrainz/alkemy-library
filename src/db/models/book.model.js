@@ -60,6 +60,7 @@ const book = (sequelize) => {
     Book.belongsToMany(models.Author, { through: "author_book" });
     Book.belongsToMany(models.Language, { through: "book_language" });
     Book.belongsToMany(models.Genre, { through: "book_genre" });
+    Book.belongsToMany(models.Collection, { through: "collection_book" });
     Book.hasMany(models.Loan);
     Book.hasMany(models.Review);
   };
